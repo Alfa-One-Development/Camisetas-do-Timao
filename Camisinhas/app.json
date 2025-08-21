@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Camisinhas",
-    "slug": "Camisinhas",
+    "name": "Loja de Camisas",
+    "slug": "LojaDeCamisas",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
