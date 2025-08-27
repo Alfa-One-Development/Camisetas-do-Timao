@@ -117,6 +117,7 @@ const CamisaItem = ({ camisa, onPress }) => {
 //componente de navegação pelo catálogo. Cria uma flatlist que é composta pelos itens do array de objetos criado.
 export default function CatalogScreen({ navigation }) {
   return (
+<<<<<<< HEAD
     <View style={styles.container}>
       <Text style={styles.titulo}>Catálogo de Camisas 👕</Text>
       {/*lista*/}
@@ -131,8 +132,30 @@ export default function CatalogScreen({ navigation }) {
             onPress={() => navigation.navigate("Details", { camisa: item })} //"onPress" vai abrir a tela Details, e envia o objeto da camisa escolhida
           />
         )}
+=======
+<View style={styles.container}>
+  {/* Título da tela */}
+  <Text style={styles.titulo}>Catálogo de Camisas 👕</Text>
+
+  {/* Lista de camisas */}
+  <FlatList
+    data={camisas} // array de dados que será exibido
+    keyExtractor={(item) => item.id.toString()} // chave única para cada item
+    numColumns={2} // exibe 2 colunas na lista
+    columnWrapperStyle={styles.columnWrapper} // estilo para a linha de colunas
+    renderItem={({ item }) => ( // função que renderiza cada item
+      <CamisaItem
+        camisa={item} // passa o objeto da camisa para o componente
+        onPress={() =>
+          // navega para a tela de detalhes passando a camisa selecionada
+          navigation.navigate("Details", { camisa: item })
+        }
+>>>>>>> 84df6cd33fba3d49658dc15e89f8463a6806aa82
       />
-    </View>
+    )}
+  />
+</View>
+
   );
 }
 

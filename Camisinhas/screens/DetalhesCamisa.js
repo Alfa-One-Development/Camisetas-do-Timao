@@ -22,7 +22,7 @@ export default function DetalhesCamisa({ route, navigation }) {
     // se nao, confirma a compra
     Alert.alert(
       "Compra Realizada",
-      `Você comprou ${quantidade} unidade(s) da camisa ${camisa.name}, valor total: R$${(
+      `Você comprou ${quantidade} unidade(s) da camisa ${camisa.name} \nValor total: R$${(
         parseFloat(camisa.preco.replace("R$", "")) * quantidade
       ).toFixed(2)}` //para arredondar o numero
     );
