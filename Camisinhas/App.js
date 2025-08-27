@@ -1,3 +1,4 @@
+// Importa pacotes essenciais do React e React Native
 import React, { useState } from "react";
 import {
   View,
@@ -14,49 +15,68 @@ import {
   TouchableOpacity,
   Dimensions
 } from "react-native";
+
+// Importa a navegação (React Navigation)
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+// Importa as telas do app
 import CatalogScreen from "./screens/catalogo";
 import DetailsScreen from "./screens/DetalhesCamisa";
 
+// Cria a pilha de navegação
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [usuario, setUsuario] = useState("");
-  const [senha, setSenha] = useState("");
-  const [logado, setLogado] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [erroModal, setErroModal] = useState(false);
+  // Estados do login
+  const [usuario, setUsuario] = useState(""); // guarda usuário digitado
+  const [senha, setSenha] = useState("");     // guarda senha digitada
+  const [logado, setLogado] = useState(false); // controla se usuário fez login
+  const [loading, setLoading] = useState(false); // mostra indicador de carregamento
+  const [erroModal, setErroModal] = useState(false); // controla exibição do modal de erro
 
+  // Função para validar login
   const handleLogin = () => {
+    // Se o usuário não digitou nada
     if (!usuario.trim()) {
-      setErroModal(true);
+      setErroModal(true); // abre o modal pedindo preenchimento
       return;
     }
-    setLoading(true);
+
+    setLoading(true); // ativa o "loading" (ActivityIndicator)
+    // Simula um delay de login (1,5 segundos)
     setTimeout(() => {
-      setLoading(false);
+      setLoading(false); // desliga o loading
       if (usuario === "aluno" && senha === "123") {
+        // Login válido
         Alert.alert("Sucesso 🎉", "Login realizado com sucesso!");
-        setLogado(true);
+        setLogado(true); // libera acesso ao app
       } else {
+        // Login inválido
         Alert.alert("Erro ❌", "Usuário ou senha incorretos.");
       }
     }, 1500);
   };
 
+  // Se o usuário ainda não está logado → exibe tela de login
   if (!logado) {
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle="dark-content" />
+
+        {/* Formulário de login */}
         <KeyboardAvoidingView behavior="padding" style={styles.form}>
           <Text style={styles.titulo}>Time de Craques ⚽</Text>
+
+          {/* Campo Usuário */}
           <TextInput
             style={styles.input}
             placeholder="Usuário"
             value={usuario}
             onChangeText={setUsuario}
           />
+
+          {/* Campo Senha */}
           <TextInput
             style={styles.input}
             placeholder="Senha"
@@ -64,13 +84,17 @@ export default function App() {
             value={senha}
             onChangeText={setSenha}
           />
+
+          {/* Botão de login */}
           <Pressable style={styles.botao} onPress={handleLogin}>
             <Text style={styles.textoBotao}>Entrar</Text>
           </Pressable>
+
+          {/* Indicador de carregamento (spinner) */}
           {loading && <ActivityIndicator size="large" color="#6200ee" />}
         </KeyboardAvoidingView>
 
-        {/* Modal de erro */}
+        {/* Modal de erro para usuário em branco */}
         <Modal visible={erroModal} transparent animationType="slide">
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
@@ -79,7 +103,7 @@ export default function App() {
               </Text>
               <TouchableOpacity
                 style={styles.fecharBotao}
-                onPress={() => setErroModal(false)}
+                onPress={() => setErroModal(false)} // fecha modal
               >
                 <Text style={{ color: "#fff" }}>Fechar</Text>
               </TouchableOpacity>
@@ -90,6 +114,7 @@ export default function App() {
     );
   }
 
+  // Se logado → mostra a navegação entre catálogo e detalhes
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -108,18 +133,20 @@ export default function App() {
   );
 }
 
+// Pega a largura da tela para ajustar o formulário
 const largura = Dimensions.get("window").width;
 
+// Estilos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "center", // centraliza verticalmente
+    alignItems: "center",     // centraliza horizontalmente
     backgroundColor: "#f4f4f4",
     padding: 20
   },
   form: {
-    width: largura * 0.9,
+    width: largura * 0.9, // 90% da largura da tela
     alignItems: "center"
   },
   titulo: {
@@ -152,7 +179,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)"
+    backgroundColor: "rgba(0,0,0,0.5)" // fundo transparente escuro
   },
   modalContent: {
     backgroundColor: "#fff",
