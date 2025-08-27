@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import CatalogScreen from "./screens/Catalogo";
+import CatalogScreen from "./screens/CatalogoLoja";
 import DetailsScreen from "./screens/DetalhesCamisa";
 
 const Stack = createNativeStackNavigator();
