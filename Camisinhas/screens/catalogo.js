@@ -8,7 +8,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-{/*array com os objetos (camisetas) para adicionar no catálogo*/}
+{
+  /*array com os objetos (camisetas) para adicionar no catálogo*/
+}
 const camisas = [
   {
     id: 1,
@@ -124,55 +126,44 @@ const camisas = [
 // componente CamisaItem definido no mesmo arquivo
 const CamisaItem = ({ camisa, onPress }) => {
   return (
-     <TouchableOpacity onPress={onPress} style={itemStyles.card}> {/*esse "botão" é o card que contem cada objeto*/}
-      <Image source={{ uri: camisa.image }} style={itemStyles.image} /> {/*aqui ele pega a imagem de cada objeto por id*/}
-      <Text style={itemStyles.name}>{camisa.name}</Text> {/*aqui ele pega o nome de cada objeto por id*/}
-      <Text style={itemStyles.preco}>{camisa.preco}</Text>{/*e aqui ele pega o preço atribuido a cada objeto, por id*/}
+    <TouchableOpacity onPress={onPress} style={itemStyles.card}>
+      {" "}
+      {/*esse "botão" é o card que contem cada objeto*/}
+      <Image source={{ uri: camisa.image }} style={itemStyles.image} />{" "}
+      {/*aqui ele pega a imagem de cada objeto por id*/}
+      <Text style={itemStyles.name}>{camisa.name}</Text>{" "}
+      {/*aqui ele pega o nome de cada objeto por id*/}
+      <Text style={itemStyles.preco}>{camisa.preco}</Text>
+      {/*e aqui ele pega o preço atribuido a cada objeto, por id*/}
     </TouchableOpacity>
   );
 };
 //componente de navegação pelo catálogo. Cria uma flatlist que é composta pelos itens do array de objetos criado.
 export default function CatalogScreen({ navigation }) {
   return (
-<<<<<<< HEAD
     <View style={styles.container}>
+      {/* Título da tela */}
       <Text style={styles.titulo}>Catálogo de Camisas 👕</Text>
-      {/*lista*/}
-      <FlatList 
-        data={camisas} // conteúdo da lista
-        keyExtractor={(item) => item.id.toString()} //"extrator de chave" é uma função que fala qual vai ser a chave única de cada item dessa lista. item é cada objeto passado
-        numColumns={2} //numero de colunas
-        columnWrapperStyle={styles.columnWrapper} //permite estilizar a linha que "contruimos" no array
-        renderItem={({ item }) => ( //função obrigatória no fl, recebe um objeto com muitas propriedades, mas a principal é o item(cada objeto od array)
-          <CamisaItem //chama o componente criao acima
-            camisa={item} //passa cada objeto como "item", renderizando ele como uma prop
-            onPress={() => navigation.navigate("Details", { camisa: item })} //"onPress" vai abrir a tela Details, e envia o objeto da camisa escolhida
+
+      {/* Lista de camisas */}
+      <FlatList
+        data={camisas} // array de dados que será exibido
+        keyExtractor={(item) => item.id.toString()} // chave única para cada item
+        numColumns={2} // exibe 2 colunas na lista
+        columnWrapperStyle={styles.columnWrapper} // estilo para a linha de colunas
+        renderItem={(
+          { item } // função que renderiza cada item
+        ) => (
+          <CamisaItem
+            camisa={item} // passa o objeto da camisa para o componente
+            onPress={() =>
+              // navega para a tela de detalhes passando a camisa selecionada
+              navigation.navigate("Details", { camisa: item })
+            }
           />
         )}
-=======
-<View style={styles.container}>
-  {/* Título da tela */}
-  <Text style={styles.titulo}>Catálogo de Camisas 👕</Text>
-
-  {/* Lista de camisas */}
-  <FlatList
-    data={camisas} // array de dados que será exibido
-    keyExtractor={(item) => item.id.toString()} // chave única para cada item
-    numColumns={2} // exibe 2 colunas na lista
-    columnWrapperStyle={styles.columnWrapper} // estilo para a linha de colunas
-    renderItem={({ item }) => ( // função que renderiza cada item
-      <CamisaItem
-        camisa={item} // passa o objeto da camisa para o componente
-        onPress={() =>
-          // navega para a tela de detalhes passando a camisa selecionada
-          navigation.navigate("Details", { camisa: item })
-        }
->>>>>>> 84df6cd33fba3d49658dc15e89f8463a6806aa82
       />
-    )}
-  />
-</View>
-
+    </View>
   );
 }
 
