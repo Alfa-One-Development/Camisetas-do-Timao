@@ -48,45 +48,64 @@ export default function App() {
   if (!logado) {
     return (
       <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <KeyboardAvoidingView behavior="padding" style={styles.form}>
-          <Text style={styles.titulo}>Time de Craques ⚽</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Usuário"
-            value={usuario}
-            onChangeText={setUsuario}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Senha"
-            secureTextEntry
-            value={senha}
-            onChangeText={setSenha}
-          />
-          <Pressable style={styles.botao} onPress={handleLogin}>
-            <Text style={styles.textoBotao}>Entrar</Text>
-          </Pressable>
-          {loading && <ActivityIndicator size="large" color="#6200ee" />}
-        </KeyboardAvoidingView>
+  {/* 🔹 Ajusta o conteúdo para não ficar atrás da barra de status */}
+  <StatusBar barStyle="dark-content" />
 
-        {/* Modal de erro */}
-        <Modal visible={erroModal} transparent animationType="slide">
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={{ fontSize: 16, marginBottom: 12 }}>
-                Por favor, preencha o usuário.
-              </Text>
-              <TouchableOpacity
-                style={styles.fecharBotao}
-                onPress={() => setErroModal(false)}
-              >
-                <Text style={{ color: "#fff" }}>Fechar</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-      </SafeAreaView>
+  {/* 🔹 Evita que o teclado cubra os campos de input */}
+  <KeyboardAvoidingView behavior="padding" style={styles.form}>
+
+    {/* 🔹 Título do login */}
+    <Text style={styles.titulo}>Time de Craques ⚽</Text>
+
+    {/* 🔹 Campo de usuário */}
+    <TextInput
+      style={styles.input}          // estilo do input
+      placeholder="Usuário"         // texto placeholder
+      value={usuario}               // valor do input (estado)
+      onChangeText={setUsuario}     // atualiza o estado ao digitar
+    />
+
+    {/* 🔹 Campo de senha */}
+    <TextInput
+      style={styles.input}
+      placeholder="Senha"
+      secureTextEntry               // esconde os caracteres da senha
+      value={senha}
+      onChangeText={setSenha}
+    />
+
+    {/* 🔹 Botão de login */}
+    <Pressable style={styles.botao} onPress={handleLogin}>
+      <Text style={styles.textoBotao}>Entrar</Text>
+    </Pressable>
+
+    {/* 🔹 Spinner de loading enquanto verifica login */}
+    {loading && <ActivityIndicator size="large" color="#6200ee" />}
+  </KeyboardAvoidingView>
+
+  {/* 🔹 Modal que aparece quando o usuário não preenche o campo */}
+  <Modal visible={erroModal} transparent animationType="slide">
+    <View style={styles.modalContainer}>
+      <View style={styles.modalContent}>
+
+        {/* 🔹 Mensagem de erro */}
+        <Text style={{ fontSize: 16, marginBottom: 12 }}>
+          Por favor, preencha o usuário.
+        </Text>
+
+        {/* 🔹 Botão para fechar o modal */}
+        <TouchableOpacity
+          style={styles.fecharBotao}
+          onPress={() => setErroModal(false)} // fecha o modal
+        >
+          <Text style={{ color: "#fff" }}>Fechar</Text>
+        </TouchableOpacity>
+
+      </View>
+    </View>
+  </Modal>
+</SafeAreaView>
+
     );
   }
 

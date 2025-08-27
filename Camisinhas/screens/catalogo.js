@@ -116,21 +116,28 @@ const CamisaItem = ({ camisa, onPress }) => {
 
 export default function CatalogScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Catálogo de Camisas 👕</Text>
-      <FlatList
-        data={camisas}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={2}
-        columnWrapperStyle={styles.columnWrapper}
-        renderItem={({ item }) => (
-          <CamisaItem
-            camisa={item}
-            onPress={() => navigation.navigate("Details", { camisa: item })}
-          />
-        )}
+<View style={styles.container}>
+  {/* 🔹 Título da tela */}
+  <Text style={styles.titulo}>Catálogo de Camisas 👕</Text>
+
+  {/* 🔹 Lista de camisas */}
+  <FlatList
+    data={camisas} // array de dados que será exibido
+    keyExtractor={(item) => item.id.toString()} // chave única para cada item
+    numColumns={2} // exibe 2 colunas na lista
+    columnWrapperStyle={styles.columnWrapper} // estilo para a linha de colunas
+    renderItem={({ item }) => ( // função que renderiza cada item
+      <CamisaItem
+        camisa={item} // passa o objeto da camisa para o componente
+        onPress={() =>
+          // navega para a tela de detalhes passando a camisa selecionada
+          navigation.navigate("Details", { camisa: item })
+        }
       />
-    </View>
+    )}
+  />
+</View>
+
   );
 }
 
