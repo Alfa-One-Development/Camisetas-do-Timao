@@ -21,7 +21,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.LojaDeCamisas"
+      "package": "com.talionelessar2007.LojaDeCamisas"
     },
     "web": {
       "favicon": "./assets/favicon.png"

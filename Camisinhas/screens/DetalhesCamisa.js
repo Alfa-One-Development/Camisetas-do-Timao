@@ -101,11 +101,9 @@ const estilos = StyleSheet.create({
   },
   imagemGrande: {
     width: "100%",
-    height: 320,
-    padding: 250,
-    resizeMode: "contain",
+    height: "60%",
+    borderRadius: 12,
     backgroundColor: "#FFF",
-    objectFit: "cover",
   },
   detalhesContainer: {
     flex: 1,
@@ -187,6 +185,7 @@ const estilos = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: "center",
+    marginBottom: 25,
   },
   textoBotaoComprar: {
     color: "#fff",

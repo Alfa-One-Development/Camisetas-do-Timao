@@ -200,7 +200,6 @@ const itemStyles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     marginHorizontal: 8,
     marginVertical: 10,
-    padding: 16,
     borderRadius: 12,
     alignItems: "center",
     shadowColor: "#000",
@@ -210,11 +209,10 @@ const itemStyles = StyleSheet.create({
     elevation: 4,
   },
   image: {
-    width: 200,
+    width: "100%",
     height: 200,
     resizeMode: "contain",
-    marginBottom: 12,
-    borderRadius: 8,
+    borderRadius: 20,
   },
   name: {
     fontSize: 16,
