@@ -28,36 +28,45 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [erroModal, setErroModal] = useState(false);
 
-  const handleLogin = () => {
-    if (!usuario.trim()) {
-      setErroModal(true);
-      return;
-    }
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      if (usuario === "aluno" && senha === "123") {
-        Alert.alert("Sucesso 🎉", "Login realizado com sucesso!");
-        setLogado(true);
-      } else {
-        Alert.alert("Erro ❌", "Usuário ou senha incorretos.");
-      }
-    }, 1500);
-  };
+// Função chamada ao pressionar o botão "Entrar"
+const handleLogin = () => {
+  // 🔸 Verifica se o campo "usuario" está vazio ou só com espaços
+  if (!usuario.trim()) {
+    setErroModal(true); // mostra o modal de erro
+    return;             // interrompe a execução da função
+  }
 
-  if (!logado) {
-    return (
-      <SafeAreaView style={styles.container}>
-  {/* 🔹 Ajusta o conteúdo para não ficar atrás da barra de status */}
+  // Ativa o indicador de loading
+  setLoading(true);
+
+  // Simula uma requisição assíncrona (ex: API) usando setTimeout
+  setTimeout(() => {
+    setLoading(false); // desativa o loading
+
+    // Verifica se usuário e senha estão corretos
+    if (usuario === "aluno" && senha === "123") {
+      Alert.alert("Sucesso 🎉", "Login realizado com sucesso!"); // alerta de sucesso
+      setLogado(true); // atualiza estado para logado
+    } else {
+      Alert.alert("Erro ❌", "Usuário ou senha incorretos.");   // alerta de erro
+    }
+  }, 1500); // simula 1,5 segundos de espera
+};
+
+// Se o usuário ainda não estiver logado, renderiza o formulário de login
+if (!logado) {
+  return (
+    <SafeAreaView style={styles.container}> // container principal da tela de login
+  {/* Ajusta o conteúdo para não ficar atrás da barra de status */}
   <StatusBar barStyle="dark-content" />
 
-  {/* 🔹 Evita que o teclado cubra os campos de input */}
+  {/* Evita que o teclado cubra os campos de input */}
   <KeyboardAvoidingView behavior="padding" style={styles.form}>
 
-    {/* 🔹 Título do login */}
+    {/* Título do login */}
     <Text style={styles.titulo}>Time de Craques ⚽</Text>
 
-    {/* 🔹 Campo de usuário */}
+    {/* Campo de usuário */}
     <TextInput
       style={styles.input}          // estilo do input
       placeholder="Usuário"         // texto placeholder
@@ -65,7 +74,7 @@ export default function App() {
       onChangeText={setUsuario}     // atualiza o estado ao digitar
     />
 
-    {/* 🔹 Campo de senha */}
+    {/* Campo de senha */}
     <TextInput
       style={styles.input}
       placeholder="Senha"
@@ -74,26 +83,26 @@ export default function App() {
       onChangeText={setSenha}
     />
 
-    {/* 🔹 Botão de login */}
+    {/* Botão de login */}
     <Pressable style={styles.botao} onPress={handleLogin}>
       <Text style={styles.textoBotao}>Entrar</Text>
     </Pressable>
 
-    {/* 🔹 Spinner de loading enquanto verifica login */}
+    {/* Spinner de loading enquanto verifica login */}
     {loading && <ActivityIndicator size="large" color="#6200ee" />}
   </KeyboardAvoidingView>
 
-  {/* 🔹 Modal que aparece quando o usuário não preenche o campo */}
+  {/* Modal que aparece quando o usuário não preenche o campo */}
   <Modal visible={erroModal} transparent animationType="slide">
     <View style={styles.modalContainer}>
       <View style={styles.modalContent}>
 
-        {/* 🔹 Mensagem de erro */}
+        {/* Mensagem de erro */}
         <Text style={{ fontSize: 16, marginBottom: 12 }}>
           Por favor, preencha o usuário.
         </Text>
 
-        {/* 🔹 Botão para fechar o modal */}
+        {/* Botão para fechar o modal */}
         <TouchableOpacity
           style={styles.fecharBotao}
           onPress={() => setErroModal(false)} // fecha o modal

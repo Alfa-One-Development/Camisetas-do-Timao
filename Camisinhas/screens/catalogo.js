@@ -117,10 +117,10 @@ const CamisaItem = ({ camisa, onPress }) => {
 export default function CatalogScreen({ navigation }) {
   return (
 <View style={styles.container}>
-  {/* 🔹 Título da tela */}
+  {/* Título da tela */}
   <Text style={styles.titulo}>Catálogo de Camisas 👕</Text>
 
-  {/* 🔹 Lista de camisas */}
+  {/* Lista de camisas */}
   <FlatList
     data={camisas} // array de dados que será exibido
     keyExtractor={(item) => item.id.toString()} // chave única para cada item
