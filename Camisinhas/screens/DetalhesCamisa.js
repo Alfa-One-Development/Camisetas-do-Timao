@@ -43,14 +43,9 @@ export default function DetalhesCamisa({ route, navigation }) {
       {/* Foto da Camisa */}
       <Image source={{ uri: camisa.image }} style={estilos.imagemGrande} />
 
-<<<<<<< HEAD
-      {/* detalhes da camisa */}
-      <View style={estilos.detalhesContainer}>
-=======
       {/* Caixa com os detalhes da camisa */}
       <ScrollView style={estilos.detalhesContainer}>
         {/* Nome e preço */}
->>>>>>> 399400597eb3e9d988227981b3fdef558c510b97
         <Text style={estilos.nomeProdutoGrande}>{camisa.name}</Text>
         <Text style={estilos.precoProdutoGrande}>{camisa.preco}</Text>
         <Text style={estilos.descricaoProduto}>{camisa.description}</Text>
