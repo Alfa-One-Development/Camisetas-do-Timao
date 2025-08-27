@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   FlatList,
@@ -7,10 +7,8 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-{
-  /*array com os objetos (camisetas) para adicionar no catálogo*/
-}
 const camisas = [
   {
     id: 1,
@@ -123,42 +121,53 @@ const camisas = [
   },
 ];
 
-// componente CamisaItem definido no mesmo arquivo
 const CamisaItem = ({ camisa, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress} style={itemStyles.card}>
-      {/*esse "botão" é o card que contem cada objeto*/}
       <Image source={{ uri: camisa.image }} style={itemStyles.image} />
-      {/*aqui ele pega a imagem de cada objeto por id*/}
       <Text style={itemStyles.name}>{camisa.name}</Text>
-      {/*aqui ele pega o nome de cada objeto por id*/}
       <Text style={itemStyles.preco}>{camisa.preco}</Text>
-      {/*e aqui ele pega o preço atribuido a cada objeto, por id*/}
     </TouchableOpacity>
   );
 };
-//componente de navegação pelo catálogo. Cria uma flatlist que é composta pelos itens do array de objetos criado.
+
 export default function CatalogScreen({ navigation }) {
+// Criei um estado pro nome aqui dentro do componente
+  const [nome, setNome] = useState("");
+
+  // Usei o useEffect pra carregar o nome quando a tela abrir
+  useEffect(() => {
+    // Fiz uma função async pra buscar o nome do AsyncStorage
+    const carregarNome = async () => {
+      try {
+        // Busquei o nome salvo
+        const nomeSalvo = await AsyncStorage.getItem("nome");
+        if (nomeSalvo) {
+          // Se tiver nome, atualizo o estado
+          setNome(nomeSalvo);
+        }
+      } catch (error) {
+        // Se der erro, mostro no console
+        console.error("Erro ao carregar nome:", error);
+      }
+    };
+
+    // Chamo a função pra carregar o nome
+    carregarNome();
+  }, []); // O array vazio [] faz isso rodar só uma vez quando a tela abre
+
   return (
     <View style={styles.container}>
-      {/* Título da tela */}
-      <Text style={styles.titulo}>Catálogo de Camisas 👕</Text>
-
-      {/* Lista de camisas */}
+      <Text style={styles.titulo}>Olá, {nome}!😎</Text>
       <FlatList
-        data={camisas} // array de dados que será exibido
-        keyExtractor={(item) => item.id.toString()} // chave única para cada item
-        numColumns={2} // exibe 2 colunas na lista
-        columnWrapperStyle={styles.columnWrapper} // estilo para a linha de colunas
-        renderItem={(
-          { item } // função que renderiza cada item
-        ) => (
+        data={camisas}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={2}
+        columnWrapperStyle={styles.columnWrapper}
+        renderItem={({ item }) => (
           <CamisaItem
-            camisa={item} // passa o objeto da camisa para o componente
-            onPress={() =>
-              // navega para a tela de detalhes passando a camisa selecionada
-              navigation.navigate("Details", { camisa: item })
-            }
+            camisa={item}
+            onPress={() => navigation.navigate("Details", { camisa: item })}
           />
         )}
       />

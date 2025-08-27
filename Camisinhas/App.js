@@ -18,103 +18,93 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CatalogScreen from "./screens/CatalogoLoja";
 import DetailsScreen from "./screens/DetalhesCamisa";
+// Mudei o nome da importação pra ficar padrão (com A maiúsculo)
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [usuario, setUsuario] = useState("");
   const [senha, setSenha] = useState("");
+  const [nome, setNome] = useState("");
   const [logado, setLogado] = useState(false);
   const [loading, setLoading] = useState(false);
   const [erroModal, setErroModal] = useState(false);
 
-// Função chamada ao pressionar o botão "Entrar"
-const handleLogin = () => {
-  // 🔸 Verifica se o campo "usuario" está vazio ou só com espaços
-  if (!usuario.trim()) {
-    setErroModal(true); // mostra o modal de erro
-    return;             // interrompe a execução da função
-  }
-
-  // Ativa o indicador de loading
-  setLoading(true);
-
-  // Simula uma requisição assíncrona (ex: API) usando setTimeout
-  setTimeout(() => {
-    setLoading(false); // desativa o loading
-
-    // Verifica se usuário e senha estão corretos
-    if (usuario === "aluno" && senha === "123") {
-      Alert.alert("Sucesso 🎉", "Login realizado com sucesso!"); // alerta de sucesso
-      setLogado(true); // atualiza estado para logado
-    } else {
-      Alert.alert("Erro ❌", "Usuário ou senha incorretos.");   // alerta de erro
+  const handleLogin = () => {
+    if (!usuario.trim()) {
+      setErroModal(true);
+      return;
     }
-  }, 1500); // simula 1,5 segundos de espera
-};
 
-// Se o usuário ainda não estiver logado, renderiza o formulário de login
-if (!logado) {
-  return (
-    <SafeAreaView style={styles.container}> // container principal da tela de login
-  {/* Ajusta o conteúdo para não ficar atrás da barra de status */}
-  <StatusBar barStyle="dark-content" />
+    setLoading(true);
 
-  {/* Evita que o teclado cubra os campos de input */}
-  <KeyboardAvoidingView behavior="padding" style={styles.form}>
+    setTimeout(() => {
+      setLoading(false);
 
-    {/* Título do login */}
-    <Text style={styles.titulo}>Time de Craques ⚽</Text>
+      if (senha === "123") {
+        Alert.alert("Sucesso 🎉", "Login realizado com sucesso!");
+      
+        AsyncStorage.setItem("nome", nome);
+        setLogado(true);
+      } else {
+        Alert.alert("Erro ❌", "Usuário ou senha incorretos.");
+      }
+    }, 1500);
+  };
 
-    {/* Campo de usuário */}
-    <TextInput
-      style={styles.input}          // estilo do input
-      placeholder="Usuário"         // texto placeholder
-      value={usuario}               // valor do input (estado)
-      onChangeText={setUsuario}     // atualiza o estado ao digitar
-    />
+  if (!logado) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" />
+        <KeyboardAvoidingView behavior="padding" style={styles.form}>
+          <Text style={styles.titulo}>Time de Craques ⚽</Text>
 
-    {/* Campo de senha */}
-    <TextInput
-      style={styles.input}
-      placeholder="Senha"
-      secureTextEntry               // esconde os caracteres da senha
-      value={senha}
-      onChangeText={setSenha}
-    />
+          <TextInput
+            style={styles.input}
+            placeholder="Usuário"
+            value={usuario}
+            onChangeText={setUsuario}
+          />
 
-    {/* Botão de login */}
-    <Pressable style={styles.botao} onPress={handleLogin}>
-      <Text style={styles.textoBotao}>Entrar</Text>
-    </Pressable>
+          <TextInput
+            style={styles.input}
+            placeholder="Senha"
+            secureTextEntry
+            value={senha}
+            onChangeText={setSenha}
+          />
 
-    {/* Spinner de loading enquanto verifica login */}
-    {loading && <ActivityIndicator size="large" color="#6200ee" />}
-  </KeyboardAvoidingView>
+          <TextInput
+            style={styles.input}
+            placeholder="Nome😎"
+            value={nome}
+            onChangeText={setNome}
+          />
 
-  {/* Modal que aparece quando o usuário não preenche o campo */}
-  <Modal visible={erroModal} transparent animationType="slide">
-    <View style={styles.modalContainer}>
-      <View style={styles.modalContent}>
+          <Pressable style={styles.botao} onPress={handleLogin}>
+            <Text style={styles.textoBotao}>Entrar</Text>
+          </Pressable>
 
-        {/* Mensagem de erro */}
-        <Text style={{ fontSize: 16, marginBottom: 12 }}>
-          Por favor, preencha o usuário.
-        </Text>
+          {loading && <ActivityIndicator size="large" color="#6200ee" />}
+        </KeyboardAvoidingView>
 
-        {/* Botão para fechar o modal */}
-        <TouchableOpacity
-          style={styles.fecharBotao}
-          onPress={() => setErroModal(false)} // fecha o modal
-        >
-          <Text style={{ color: "#fff" }}>Fechar</Text>
-        </TouchableOpacity>
-
-      </View>
-    </View>
-  </Modal>
-</SafeAreaView>
-
+        <Modal visible={erroModal} transparent animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={{ fontSize: 16, marginBottom: 12 }}>
+                Por favor, preencha o usuário.
+              </Text>
+              <TouchableOpacity
+                style={styles.fecharBotao}
+                onPress={() => setErroModal(false)}
+              >
+                <Text style={{ color: "#fff" }}>Fechar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </SafeAreaView>
     );
   }
 
