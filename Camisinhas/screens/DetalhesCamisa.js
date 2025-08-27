@@ -88,19 +88,16 @@ export default function DetalhesCamisa({ route, navigation }) {
   );
 }
 
-
 const estilos = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA", 
+    backgroundColor: "#F8F9FA",
   },
   imagemGrande: {
     width: "100%",
-    height: 320,
-    padding: 250,
-    resizeMode: "contain",
+    height: "60%",
+    borderRadius: 12,
     backgroundColor: "#FFF",
-    objectFit: "cover", // preenche a área da imagem
   },
   detalhesContainer: {
     flex: 1,
@@ -126,7 +123,7 @@ const estilos = StyleSheet.create({
   precoProdutoGrande: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#28A745", 
+    color: "#28A745",
     marginBottom: 12,
   },
   descricaoProduto: {
@@ -178,10 +175,11 @@ const estilos = StyleSheet.create({
     fontWeight: "bold",
   },
   botaoComprar: {
-    backgroundColor: "#2196F3", 
+    backgroundColor: "#2196F3",
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: "center",
+    marginBottom: 25,
   },
   textoBotaoComprar: {
     color: "#fff",
