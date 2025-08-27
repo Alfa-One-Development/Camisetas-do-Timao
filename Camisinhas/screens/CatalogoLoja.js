@@ -127,11 +127,10 @@ const camisas = [
 const CamisaItem = ({ camisa, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress} style={itemStyles.card}>
-      {" "}
       {/*esse "botão" é o card que contem cada objeto*/}
-      <Image source={{ uri: camisa.image }} style={itemStyles.image} />{" "}
+      <Image source={{ uri: camisa.image }} style={itemStyles.image} />
       {/*aqui ele pega a imagem de cada objeto por id*/}
-      <Text style={itemStyles.name}>{camisa.name}</Text>{" "}
+      <Text style={itemStyles.name}>{camisa.name}</Text>
       {/*aqui ele pega o nome de cada objeto por id*/}
       <Text style={itemStyles.preco}>{camisa.preco}</Text>
       {/*e aqui ele pega o preço atribuido a cada objeto, por id*/}
