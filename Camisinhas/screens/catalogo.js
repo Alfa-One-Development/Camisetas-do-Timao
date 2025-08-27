@@ -1,5 +1,12 @@
 import React from "react";
-import { View, FlatList, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 
 const camisas = [
   {
@@ -15,7 +22,8 @@ const camisas = [
     id: 2,
     name: "Real Madrid",
     preco: "R$ 219,99",
-    image: "https://acdn-us.mitiendanube.com/stores/002/255/556/products/img_1462-b6856d0301c75011f217494158329265-1024-1024.jpeg",
+    image:
+      "https://acdn-us.mitiendanube.com/stores/002/255/556/products/img_1462-b6856d0301c75011f217494158329265-1024-1024.jpeg",
     description: "Camisa oficial do Real Madrid 2021/22.",
     estoque: 25,
     avaliacoes: 4.3,
@@ -24,7 +32,8 @@ const camisas = [
     id: 3,
     name: "PSG",
     preco: "R$ 129,99",
-    image: "https://images.tcdn.com.br/img/img_prod/1052037/camisa_psg_home_2024_25_torcedor_5087_1_4fe5a6ea4ccfce97f9c70d30205c1d1f.jpg",
+    image:
+      "https://images.tcdn.com.br/img/img_prod/1052037/camisa_psg_home_2024_25_torcedor_5087_1_4fe5a6ea4ccfce97f9c70d30205c1d1f.jpg",
     description: "Camisa do Paris Saint-Germain 2021/22.",
     estoque: 75,
     avaliacoes: 4.0,
@@ -33,7 +42,8 @@ const camisas = [
     id: 4,
     name: "Manchester City",
     preco: "R$ 499,99",
-    image: "https://acdn-us.mitiendanube.com/stores/002/322/390/products/camisa-manchester-city-home1-07f3d715f6c1cc502417428529708354-1024-1024.jpeg",
+    image:
+      "https://acdn-us.mitiendanube.com/stores/002/322/390/products/camisa-manchester-city-home1-07f3d715f6c1cc502417428529708354-1024-1024.jpeg",
     description: "Camisa do Manchester City 2021/22.",
     estoque: 33,
     avaliacoes: 4.4,
@@ -42,61 +52,68 @@ const camisas = [
     id: 5,
     name: "Bayern de Munich",
     preco: "R$ 649,99",
-    image: "https://tse3.mm.bing.net/th/id/OIP.rCgps10zFxYNMJHV6yybqAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+    image:
+      "https://tse3.mm.bing.net/th/id/OIP.rCgps10zFxYNMJHV6yybqAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
     description: "Camisa oficial do Bayern de Munich 2021/22.",
     estoque: 47,
     avaliacoes: 4.8,
   },
-    {
+  {
     id: 6,
     name: "Flamengo",
     preco: "R$ 4090,99",
-    image: "https://acdn-us.mitiendanube.com/stores/004/285/036/products/camisa-flamengo-2425-torcedor-masculina-adidas-vermelho-preto-1-00575796ccf034808517098434512579-1024-1024.png",
+    image:
+      "https://acdn-us.mitiendanube.com/stores/004/285/036/products/camisa-flamengo-2425-torcedor-masculina-adidas-vermelho-preto-1-00575796ccf034808517098434512579-1024-1024.png",
     description: "Camisa oficial do Flamengo 2021/22.",
     estoque: 470,
     avaliacoes: 4.9,
   },
-      {
+  {
     id: 7,
     name: "Corinthians",
     preco: "R$ 49,99",
-    image: "https://www.futebolreligiao.com.br/image/cache/catalog/Corinthians/Camisa%20I%20Corinthians%202024%20Home-900x900.png",
+    image:
+      "https://www.futebolreligiao.com.br/image/cache/catalog/Corinthians/Camisa%20I%20Corinthians%202024%20Home-900x900.png",
     description: "Camisa oficial do Corinthians 2024/25.",
     estoque: 10,
     avaliacoes: 3.6,
   },
-        {
+  {
     id: 8,
     name: "Santos",
     preco: "R$ 249,99",
-    image: "https://dcdn-us.mitiendanube.com/stores/004/009/124/products/camisa-iii-santos-retro-12-13-masculina-azul-d60296c5182c2323e817060349841057-1024-1024.jpg",
+    image:
+      "https://dcdn-us.mitiendanube.com/stores/004/009/124/products/camisa-iii-santos-retro-12-13-masculina-azul-d60296c5182c2323e817060349841057-1024-1024.jpg",
     description: "Camisa oficial do Corinthians 2024/25.",
     estoque: 64,
     avaliacoes: 2.9,
   },
-          {
+  {
     id: 9,
     name: "Palmeiras",
     preco: "R$ 19,99",
-    image: "https://lojapalmeiras.vtexassets.com/arquivos/ids/187676/_0067_777230_01.jpg?v=638657305118100000",
+    image:
+      "https://lojapalmeiras.vtexassets.com/arquivos/ids/187676/_0067_777230_01.jpg?v=638657305118100000",
     description: "Camisa oficial do Palmeiras 2024/25.",
     estoque: 1951,
     avaliacoes: 1.2,
   },
-            {
+  {
     id: 10,
     name: "Vasco",
     preco: "R$ 1149,99",
-    image: "https://acdn-us.mitiendanube.com/stores/001/669/796/products/vasco-preta-4-3843cfad27dd1e3c7017207040780994-1024-1024.jpg",
+    image:
+      "https://acdn-us.mitiendanube.com/stores/001/669/796/products/vasco-preta-4-3843cfad27dd1e3c7017207040780994-1024-1024.jpg",
     description: "Camisa oficial do Palmeiras 2024/25.",
     estoque: 2,
     avaliacoes: 5.0,
   },
-              {
+  {
     id: 11,
     name: "Seleção Brasileira",
     preco: "R$ 449,99",
-    image: "https://acdn-us.mitiendanube.com/stores/002/322/390/products/camisa-brasil-1994-1f3be22482504b472a17195143453217-640-0.webp",
+    image:
+      "https://acdn-us.mitiendanube.com/stores/002/322/390/products/camisa-brasil-1994-1f3be22482504b472a17195143453217-640-0.webp",
     description: "Camisa oficial da Seleção Brasileira 2024/25.",
     estoque: 27,
     avaliacoes: 4.6,
@@ -166,7 +183,7 @@ const itemStyles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
-    elevation: 4,    
+    elevation: 4,
   },
   image: {
     width: 200,

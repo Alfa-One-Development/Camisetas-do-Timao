@@ -12,11 +12,11 @@ import {
   KeyboardAvoidingView,
   Modal,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import CatalogScreen from "./screens/catalogo";
+import CatalogScreen from "./screens/Catalogo";
 import DetailsScreen from "./screens/DetalhesCamisa";
 
 const Stack = createNativeStackNavigator();
@@ -116,16 +116,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f4f4f4",
-    padding: 20
+    padding: 20,
   },
   form: {
     width: largura * 0.9,
-    alignItems: "center"
+    alignItems: "center",
   },
   titulo: {
     fontSize: 26,
     fontWeight: "bold",
-    marginBottom: 20
+    marginBottom: 20,
   },
   input: {
     width: "100%",
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     marginBottom: 12,
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
   },
   botao: {
     backgroundColor: "#6200ee",
@@ -142,27 +142,27 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: "100%",
     alignItems: "center",
-    marginBottom: 10
+    marginBottom: 10,
   },
   textoBotao: {
     color: "#fff",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)"
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
     backgroundColor: "#fff",
     padding: 20,
     borderRadius: 8,
-    alignItems: "center"
+    alignItems: "center",
   },
   fecharBotao: {
     backgroundColor: "#6200ee",
     padding: 10,
-    borderRadius: 6
-  }
+    borderRadius: 6,
+  },
 });

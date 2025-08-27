@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ScrollView,
+} from "react-native";
 
 export default function DetalhesCamisa({ route, navigation }) {
   // Recebe o objeto "camisa" passado pela rota
@@ -22,7 +30,9 @@ export default function DetalhesCamisa({ route, navigation }) {
     // Se estiver dentro do limite, mostra confirmação de compra
     Alert.alert(
       "Compra Realizada",
-      `Você comprou ${quantidade} unidade(s) da camisa ${camisa.name}, valor total: R$${(
+      `Você comprou ${quantidade} unidade(s) da camisa ${
+        camisa.name
+      }, valor total: R$${(
         parseFloat(camisa.preco.replace("R$", "")) * quantidade
       ).toFixed(2)}`
     );
@@ -34,7 +44,7 @@ export default function DetalhesCamisa({ route, navigation }) {
       <Image source={{ uri: camisa.image }} style={estilos.imagemGrande} />
 
       {/* Caixa com os detalhes da camisa */}
-      <View style={estilos.detalhesContainer}>
+      <ScrollView style={estilos.detalhesContainer}>
         {/* Nome e preço */}
         <Text style={estilos.nomeProdutoGrande}>{camisa.name}</Text>
         <Text style={estilos.precoProdutoGrande}>{camisa.preco}</Text>
@@ -77,7 +87,7 @@ export default function DetalhesCamisa({ route, navigation }) {
         <TouchableOpacity style={estilos.botaoComprar} onPress={Alertar}>
           <Text style={estilos.textoBotaoComprar}>Comprar</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </View>
   );
 }
