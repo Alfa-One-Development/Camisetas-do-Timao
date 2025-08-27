@@ -32,7 +32,7 @@ export default function DetalhesCamisa({ route, navigation }) {
       "Compra Realizada",
       `Você comprou ${quantidade} unidade(s) da camisa ${
         camisa.name
-      }, valor total: R$${(
+      } \nValor total: R$${(
         parseFloat(camisa.preco.replace("R$", "")) * quantidade
       ).toFixed(2)}`
     );
