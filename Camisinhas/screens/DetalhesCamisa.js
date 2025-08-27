@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from "react-native";
 
 export default function DetalhesCamisa({ route, navigation }) {
-  // Recebe o objeto "camisa" passado pela rota
+  // recebe o objeto "camisa" passado pela rota
   const { camisa } = route.params;
 
-  // Estado para controlar a quantidade escolhida
+  // estado que controla a quantidade escolhida
   const [quantidade, setQuantidade] = useState(1);
 
-  // Função que dispara o alerta ao clicar em "Comprar"
+  // alert que daquando clica em comprar
   function Alertar() {
-    // Se a quantidade escolhida for maior que o estoque disponível
+    // se o usuario tentar comprar mais que o disponivel no estoque
     if (quantidade > camisa.estoque) {
       Alert.alert(
         "Estoque Insuficiente",
@@ -19,61 +19,56 @@ export default function DetalhesCamisa({ route, navigation }) {
       return;
     }
 
-    // Se estiver dentro do limite, mostra confirmação de compra
+    // se nao, confirma a compra
     Alert.alert(
       "Compra Realizada",
       `Você comprou ${quantidade} unidade(s) da camisa ${camisa.name}, valor total: R$${(
         parseFloat(camisa.preco.replace("R$", "")) * quantidade
-      ).toFixed(2)}`
+      ).toFixed(2)}` //para arredondar o numero
     );
   }
 
   return (
     <View style={estilos.container}>
-      {/* Imagem do produto */}
+      {/* Foto da Camisa */}
       <Image source={{ uri: camisa.image }} style={estilos.imagemGrande} />
 
-      {/* Caixa com os detalhes da camisa */}
+      {/* detalhes da camisa */}
       <View style={estilos.detalhesContainer}>
-        {/* Nome e preço */}
         <Text style={estilos.nomeProdutoGrande}>{camisa.name}</Text>
         <Text style={estilos.precoProdutoGrande}>{camisa.preco}</Text>
-
-        {/* Descrição */}
         <Text style={estilos.descricaoProduto}>{camisa.description}</Text>
-
-        {/* Informações extras: estoque e avaliação */}
         <View style={estilos.infoExtras}>
           <Text style={estilos.estoque}>Estoque: {camisa.estoque}</Text>
           <Text style={estilos.avaliacao}>⭐ {camisa.avaliacoes} / 5</Text>
         </View>
 
-        {/* Seletor de quantidade */}
+        {/* seletor de quantidade */}
         <View style={estilos.seletorQuantidade}>
           <Text style={estilos.labelQuantidade}>Quantidade:</Text>
 
-          {/* Botões de controle (- e +) */}
+          {/* botoes que alteram a quantidade */}
           <View style={estilos.controlesQuantidade}>
             <TouchableOpacity
               style={estilos.botaoQuantidade}
-              onPress={() => setQuantidade(Math.max(1, quantidade - 1))} // Impede quantidade < 1
+              onPress={() => setQuantidade(Math.max(1, quantidade - 1))} // garante que a menor quantidade seja 1 "maior valor entre 1 e quantidade-1"
             >
               <Text style={estilos.textoQuantidade}>-</Text>
             </TouchableOpacity>
 
-            {/* Número da quantidade atual */}
+            {/* número da quantidade atual */}
             <Text style={estilos.numeroQuantidade}>{quantidade}</Text>
 
             <TouchableOpacity
               style={estilos.botaoQuantidade}
-              onPress={() => setQuantidade(quantidade + 1)}
+              onPress={() => setQuantidade(quantidade + 1)} //verificação de estoque ta la em cima
             >
               <Text style={estilos.textoQuantidade}>+</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        {/* Botão de compra */}
+        {/* botão de compra */}
         <TouchableOpacity style={estilos.botaoComprar} onPress={Alertar}>
           <Text style={estilos.textoBotaoComprar}>Comprar</Text>
         </TouchableOpacity>
@@ -82,11 +77,11 @@ export default function DetalhesCamisa({ route, navigation }) {
   );
 }
 
-/* 🎨 Estilos do layout */
+
 const estilos = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA", // cor de fundo clara
+    backgroundColor: "#F8F9FA", 
   },
   imagemGrande: {
     width: "100%",
@@ -100,9 +95,9 @@ const estilos = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: "#FFF",
-    borderTopLeftRadius: 20, // cantos arredondados
+    borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    marginTop: -12, // sobe para colar na imagem
+    marginTop: -12,
     elevation: 4, // sombra no Android
     shadowColor: "#000", // sombra no iOS
     shadowOpacity: 0.1,
@@ -120,7 +115,7 @@ const estilos = StyleSheet.create({
   precoProdutoGrande: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#28A745", // verde (padrão de preço)
+    color: "#28A745", 
     marginBottom: 12,
   },
   descricaoProduto: {
@@ -172,7 +167,7 @@ const estilos = StyleSheet.create({
     fontWeight: "bold",
   },
   botaoComprar: {
-    backgroundColor: "#2196F3", // azul padrão
+    backgroundColor: "#2196F3", 
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: "center",

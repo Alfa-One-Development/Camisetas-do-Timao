@@ -1,6 +1,7 @@
 import React from "react";
 import { View, FlatList, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 
+{/*array com os objetos (camisetas) para adicionar no catálogo*/}
 const camisas = [
   {
     id: 1,
@@ -103,30 +104,31 @@ const camisas = [
   },
 ];
 
-// Componente CamisaItem definido no mesmo arquivo
+// componente CamisaItem definido no mesmo arquivo
 const CamisaItem = ({ camisa, onPress }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={itemStyles.card}>
-      <Image source={{ uri: camisa.image }} style={itemStyles.image} />
-      <Text style={itemStyles.name}>{camisa.name}</Text>
-      <Text style={itemStyles.preco}>{camisa.preco}</Text>
+     <TouchableOpacity onPress={onPress} style={itemStyles.card}> {/*esse "botão" é o card que contem cada objeto*/}
+      <Image source={{ uri: camisa.image }} style={itemStyles.image} /> {/*aqui ele pega a imagem de cada objeto por id*/}
+      <Text style={itemStyles.name}>{camisa.name}</Text> {/*aqui ele pega o nome de cada objeto por id*/}
+      <Text style={itemStyles.preco}>{camisa.preco}</Text>{/*e aqui ele pega o preço atribuido a cada objeto, por id*/}
     </TouchableOpacity>
   );
 };
-
+//componente de navegação pelo catálogo. Cria uma flatlist que é composta pelos itens do array de objetos criado.
 export default function CatalogScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Catálogo de Camisas 👕</Text>
-      <FlatList
-        data={camisas}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={2}
-        columnWrapperStyle={styles.columnWrapper}
-        renderItem={({ item }) => (
-          <CamisaItem
-            camisa={item}
-            onPress={() => navigation.navigate("Details", { camisa: item })}
+      {/*lista*/}
+      <FlatList 
+        data={camisas} // conteúdo da lista
+        keyExtractor={(item) => item.id.toString()} //"extrator de chave" é uma função que fala qual vai ser a chave única de cada item dessa lista. item é cada objeto passado
+        numColumns={2} //numero de colunas
+        columnWrapperStyle={styles.columnWrapper} //permite estilizar a linha que "contruimos" no array
+        renderItem={({ item }) => ( //função obrigatória no fl, recebe um objeto com muitas propriedades, mas a principal é o item(cada objeto od array)
+          <CamisaItem //chama o componente criao acima
+            camisa={item} //passa cada objeto como "item", renderizando ele como uma prop
+            onPress={() => navigation.navigate("Details", { camisa: item })} //"onPress" vai abrir a tela Details, e envia o objeto da camisa escolhida
           />
         )}
       />

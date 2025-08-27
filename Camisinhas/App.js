@@ -29,7 +29,7 @@ export default function App() {
   const [erroModal, setErroModal] = useState(false);
 
   const handleLogin = () => {
-    if (!usuario.trim()) {
+    if (!usuario.trim()) {//verifica se o usuario digitou algo
       setErroModal(true);
       return;
     }
@@ -40,9 +40,9 @@ export default function App() {
         Alert.alert("Sucesso 🎉", "Login realizado com sucesso!");
         setLogado(true);
       } else {
-        Alert.alert("Erro ❌", "Usuário ou senha incorretos.");
+        Alert.alert("Erro ❌", "Usuário ou senha incorretos.");//se nao for aluno e 123, ta errado
       }
-    }, 1500);
+    }, 1500);//tempo de carregamento do loading
   };
 
   if (!logado) {
