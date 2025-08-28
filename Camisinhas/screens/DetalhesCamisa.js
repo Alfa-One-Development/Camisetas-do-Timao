@@ -21,11 +21,17 @@ export default function DetalhesCamisa({ route }) {
   const [nome, setNome] = useState(""); // Nome do usuário
 
   //----- CARREGAR NOME DO USUÁRIO -----
+  // estado do tamanho selecionado
+  const [tamanhoSelecionado, setTamanhoSelecionado] = useState(null);
+  const tamanhos = ["P", "M", "G", "GG", "G1"];
+
   useEffect(() => {
     const carregarNomeUsuario = async () => {
       try {
         const nomeSalvo = await AsyncStorage.getItem("nome");
-        if (nomeSalvo) setNome(nomeSalvo);
+        if (nomeSalvo) {
+          setNome(nomeSalvo);
+        }
       } catch (error) {
         console.error("Erro ao carregar nome:", error);
       }
@@ -35,6 +41,11 @@ export default function DetalhesCamisa({ route }) {
 
   //----- FUNÇÃO DE COMPRA -----
   const realizarCompra = () => {
+    if (!tamanhoSelecionado) {
+      Alert.alert("Selecione um tamanho", "Você precisa escolher um tamanho antes de comprar.");
+      return;
+    }
+
     if (quantidade > camisa.estoque) {
       Alert.alert(
         "Estoque Insuficiente",
@@ -50,7 +61,9 @@ export default function DetalhesCamisa({ route }) {
       "Compra Realizada",
       `Parabéns ${nome}, você comprou ${quantidade} unidade(s) da camisa ${
         camisa.name
-      } \nValor total: R$${valorTotal.toFixed(2)}`
+      } - Tamanho ${tamanhoSelecionado}\nValor total: R$${(
+        parseFloat(camisa.preco.replace("R$", "").replace(",", ".")) * quantidade
+      ).toFixed(2)}`
     );
   };
 
@@ -90,7 +103,9 @@ export default function DetalhesCamisa({ route }) {
   //----- RENDER -----
   return (
     <View style={estilos.container}>
-      {/* Imagem grande da camisa */}
+      <Text style={estilos.titulo}>
+        Essa camisa do {camisa.name} ficaria muito boa em você, {nome}!
+      </Text>
       <Image source={{ uri: camisa.image }} style={estilos.imagemGrande} />
 
       <ScrollView style={estilos.detalhesContainer}>
@@ -105,6 +120,33 @@ export default function DetalhesCamisa({ route }) {
         </View>
 
         {/* Seletor de quantidade */}
+        {/* seletor de tamanhos */}
+        <View style={estilos.seletorTamanho}>
+          <Text style={estilos.labelTamanho}>Selecione o tamanho:</Text>
+          <View style={estilos.opcoes}>
+            {tamanhos.map((tamanho) => (
+              <TouchableOpacity
+                key={tamanho}
+                style={[
+                  estilos.botaoTamanho,
+                  tamanhoSelecionado === tamanho && estilos.tamanhoSelecionado,
+                ]}
+                onPress={() => setTamanhoSelecionado(tamanho)}
+              >
+                <Text
+                  style={[
+                    estilos.textoTamanho,
+                    tamanhoSelecionado === tamanho && estilos.textoSelecionado,
+                  ]}
+                >
+                  {tamanho}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* seletor de quantidade */}
         <View style={estilos.seletorQuantidade}>
           <Text style={estilos.labelQuantidade}>Quantidade:</Text>
           <View style={estilos.controlesQuantidade}>
@@ -189,9 +231,55 @@ const estilos = StyleSheet.create({
     marginBottom: 14,
     lineHeight: 22,
   },
-  infoExtras: { marginBottom: 18 },
-  estoque: { fontSize: 15, color: "#555" },
-  avaliacao: { fontSize: 15, color: "#f39c12" },
+  
+  infoExtras: {
+    marginBottom: 18,
+  },
+  estoque: {
+    fontSize: 15,
+    color: "#555",
+  },
+  avaliacao: {
+    fontSize: 15,
+    color: "#f39c12",
+  },
+
+  // seletor de tamanho
+  seletorTamanho: {
+    marginBottom: 20,
+  },
+  labelTamanho: {
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 8,
+  },
+  opcoes: {
+    flexDirection: "row",
+    gap: 8,
+    flexWrap: "wrap",
+  },
+  botaoTamanho: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#ccc",
+    backgroundColor: "#f5f5f5",
+  },
+  tamanhoSelecionado: {
+    backgroundColor: "#4169E1",
+    borderColor: "#4169E1",
+  },
+  textoTamanho: {
+    fontSize: 18,
+    color: "#333",
+    fontWeight: "bold",
+  },
+  textoSelecionado: {
+    color: "#fff",
+  },
+
+  // seletor de quantidade
   seletorQuantidade: {
     flexDirection: "row",
     alignItems: "center",
@@ -231,4 +319,12 @@ const estilos = StyleSheet.create({
     marginHorizontal: 5,
   },
   textoWishlist: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+}),
+  titulo: {
+    fontSize: 20,
+    fontWeight: "600",
+    textAlign: "center",
+    marginVertical: 10,
+    color: "#1E3A8A",
+  },
 });
