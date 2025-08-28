@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   FlatList,
@@ -6,9 +6,77 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+const toggleWishlist = async (camisa) => {
+  const saved = await AsyncStorage.getItem("wishlist");
+  let list = saved ? JSON.parse(saved) : [];
+  const exists = list.find((c) => c.id === camisa.id);
+  if (exists) {
+    Alert.alert("Atenção!", "Essa Camisa já está na lista!");
+  } else {
+    list.push(camisa);
+    await AsyncStorage.setItem("wishlist", JSON.stringify(list));
+    Alert.alert("Parabéns!", "Essa Camisa foi adicionada à lista com sucesso!");
+  }
+};
+
+const CamisaItem = ({ camisa, onPress }) => {
+  return (
+    <View style={itemStyles.card}>
+      {/* área clicável que leva ao detalhe */}
+      <TouchableOpacity style={itemStyles.touchArea} onPress={onPress}>
+        <Image source={{ uri: camisa.image }} style={itemStyles.image} />
+        <Text style={itemStyles.name}>{camisa.name}</Text>
+        <Text style={itemStyles.preco}>{camisa.preco}</Text>
+      </TouchableOpacity>
+
+      {/* botão de favoritar separado (fora da área de navegação) */}
+      <TouchableOpacity onPress={() => toggleWishlist(camisa)}>
+        <Text style={itemStyles.curtir}>💖</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export default function CatalogScreen({ navigation }) {
+  const [nome, setNome] = useState("");
+
+  useEffect(() => {
+    const carregarNome = async () => {
+      try {
+        const nomeSalvo = await AsyncStorage.getItem("nome");
+        if (nomeSalvo) setNome(nomeSalvo);
+      } catch (error) {
+        console.error("Erro ao carregar nome:", error);
+      }
+    };
+    carregarNome();
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Olá, {nome}!😎</Text>
+      <FlatList
+        data={camisas}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={2}
+        columnWrapperStyle={styles.columnWrapper}
+        renderItem={({ item }) => (
+          // IMPORTANTE: usamos exatamente "Details" (mesmo name do Stack.Screen)
+          <CamisaItem
+            camisa={item}
+            onPress={() => navigation.navigate("Details", { camisa: item })}
+          />
+        )}
+      />
+    </View>
+  );
+}
+
+/* --- camisas e estilos (mesmos que você já tinha) --- */
 const camisas = [
   {
     id: 1,
@@ -121,66 +189,8 @@ const camisas = [
   },
 ];
 
-const CamisaItem = ({ camisa, onPress }) => {
-  return (
-    <TouchableOpacity onPress={onPress} style={itemStyles.card}>
-      <Image source={{ uri: camisa.image }} style={itemStyles.image} />
-      <Text style={itemStyles.name}>{camisa.name}</Text>
-      <Text style={itemStyles.preco}>{camisa.preco}</Text>
-    </TouchableOpacity>
-  );
-};
-
-export default function CatalogScreen({ navigation }) {
-// Criei um estado pro nome aqui dentro do componente
-  const [nome, setNome] = useState("");
-
-  // Usei o useEffect pra carregar o nome quando a tela abrir
-  useEffect(() => {
-    // Fiz uma função async pra buscar o nome do AsyncStorage
-    const carregarNome = async () => {
-      try {
-        // Busquei o nome salvo
-        const nomeSalvo = await AsyncStorage.getItem("nome");
-        if (nomeSalvo) {
-          // Se tiver nome, atualizo o estado
-          setNome(nomeSalvo);
-        }
-      } catch (error) {
-        // Se der erro, mostro no console
-        console.error("Erro ao carregar nome:", error);
-      }
-    };
-
-    // Chamo a função pra carregar o nome
-    carregarNome();
-  }, []); // O array vazio [] faz isso rodar só uma vez quando a tela abre
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Olá, {nome}!😎</Text>
-      <FlatList
-        data={camisas}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={2}
-        columnWrapperStyle={styles.columnWrapper}
-        renderItem={({ item }) => (
-          <CamisaItem
-            camisa={item}
-            onPress={() => navigation.navigate("Details", { camisa: item })}
-          />
-        )}
-      />
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: "#F0F4F8",
-  },
+  container: { flex: 1, padding: 16, backgroundColor: "#F0F4F8" },
   titulo: {
     fontSize: 28,
     fontWeight: "800",
@@ -188,10 +198,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#1E3A8A",
   },
-  columnWrapper: {
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
+  columnWrapper: { justifyContent: "space-between", marginBottom: 10 },
 });
 
 const itemStyles = StyleSheet.create({
@@ -202,28 +209,19 @@ const itemStyles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 12,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
     elevation: 4,
+    paddingBottom: 8,
   },
-  image: {
-    width: "100%",
-    height: 200,
-    resizeMode: "contain",
-    borderRadius: 20,
-  },
+  touchArea: { width: "100%", alignItems: "center" },
+  image: { width: "100%", height: 160, resizeMode: "contain", borderRadius: 8 },
   name: {
     fontSize: 16,
     fontWeight: "700",
     color: "#333333",
     textAlign: "center",
-    marginBottom: 4,
+    marginVertical: 6,
   },
-  preco: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#4CAF50",
-  },
+  preco: { fontSize: 14, fontWeight: "bold", color: "#4CAF50" },
+  heartBtn: { position: "absolute", right: 10, bottom: 8, padding: 6 },
+  curtir: { fontSize: 18 },
 });

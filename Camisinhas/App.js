@@ -18,7 +18,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CatalogScreen from "./screens/CatalogoLoja";
 import DetailsScreen from "./screens/DetalhesCamisa";
-// Mudei o nome da importação pra ficar padrão (com A maiúsculo)
+import WishlistScreen from "./screens/WishlistScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
@@ -44,7 +44,6 @@ export default function App() {
 
       if (senha === "123") {
         Alert.alert("Sucesso 🎉", "Login realizado com sucesso!");
-      
         AsyncStorage.setItem("nome", nome);
         setLogado(true);
       } else {
@@ -114,12 +113,24 @@ export default function App() {
         <Stack.Screen
           name="Catalog"
           component={CatalogScreen}
-          options={{ title: "Catálogo de Camisas" }}
+          options={({ navigation }) => ({
+            title: "Catálogo de Camisas",
+            headerRight: () => (
+              <TouchableOpacity onPress={() => navigation.navigate("Wishlist")}>
+                <Text style={{ fontSize: 20 }}>❤</Text>
+              </TouchableOpacity>
+            ),
+          })}
         />
         <Stack.Screen
           name="Details"
           component={DetailsScreen}
           options={{ title: "Detalhes da Camisa" }}
+        />
+        <Stack.Screen
+          name="Wishlist"
+          component={WishlistScreen}
+          options={{ title: "Lista de Desejos 💖" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -136,15 +147,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#f4f4f4",
     padding: 20,
   },
-  form: {
-    width: largura * 0.9,
-    alignItems: "center",
-  },
-  titulo: {
-    fontSize: 26,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
+  form: { width: largura * 0.9, alignItems: "center" },
+  titulo: { fontSize: 26, fontWeight: "bold", marginBottom: 20 },
   input: {
     width: "100%",
     borderWidth: 1,
@@ -162,10 +166,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-  textoBotao: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
+  textoBotao: { color: "#fff", fontWeight: "bold" },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -178,9 +179,5 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
   },
-  fecharBotao: {
-    backgroundColor: "#6200ee",
-    padding: 10,
-    borderRadius: 6,
-  },
+  fecharBotao: { backgroundColor: "#6200ee", padding: 10, borderRadius: 6 },
 });
