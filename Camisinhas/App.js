@@ -98,7 +98,7 @@ export default function App() {
           {/* Input do nome */}
           <TextInput
             style={styles.input}
-            placeholder="Nome😎"
+            placeholder="Apelido Carinhoso 😎"
             value={nome}
             onChangeText={setNome}
           />

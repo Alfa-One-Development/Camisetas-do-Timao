@@ -73,14 +73,14 @@ export default function DetalhesCamisa({ route }) {
 
   //----- ADICIONAR À LISTA DE DESEJOS -----
   const adicionarListaDesejos = async () => {
-    const salvo = await AsyncStorage.getItem("wishlist");
+    const salvo = await AsyncStorage.getItem("desejos");
     let listaDesejos = salvo ? JSON.parse(salvo) : [];
 
     const existe = listaDesejos.find((c) => c.id === camisa.id);
 
     if (!existe) {
       listaDesejos.push(camisa);
-      await AsyncStorage.setItem("wishlist", JSON.stringify(listaDesejos));
+      await AsyncStorage.setItem("desejos", JSON.stringify(listaDesejos));
       Alert.alert(
         "Adicionado 💖",
         `${camisa.name} foi adicionado à sua lista de desejos!`
@@ -92,11 +92,11 @@ export default function DetalhesCamisa({ route }) {
 
   //----- REMOVER DA LISTA DE DESEJOS -----
   const removerListaDesejos = async () => {
-    const salvo = await AsyncStorage.getItem("wishlist");
+    const salvo = await AsyncStorage.getItem("desejos");
     let listaDesejos = salvo ? JSON.parse(salvo) : [];
 
     const atualizado = listaDesejos.filter((c) => c.id !== camisa.id);
-    await AsyncStorage.setItem("wishlist", JSON.stringify(atualizado));
+    await AsyncStorage.setItem("desejos", JSON.stringify(atualizado));
 
     Alert.alert(
       "Removido 💔",
@@ -107,9 +107,6 @@ export default function DetalhesCamisa({ route }) {
   //----- RENDER -----
   return (
     <View style={estilos.container}>
-      <Text style={estilos.titulo}>
-        Essa camisa do {camisa.name} ficaria muito boa em você, {nome}!
-      </Text>
       <Image source={{ uri: camisa.image }} style={estilos.imagemGrande} />
 
       <ScrollView style={estilos.detalhesContainer}>
@@ -172,20 +169,20 @@ export default function DetalhesCamisa({ route }) {
           </View>
         </View>
 
-        {/* Linha de botões de wishlist */}
+        {/* Linha de botões de desejos */}
         <View style={estilos.linhaBotoes}>
           <TouchableOpacity
-            style={[estilos.botaoWishlist, { backgroundColor: "#E91E63" }]}
+            style={[estilos.botaodesejos, { backgroundColor: "#E91E63" }]}
             onPress={adicionarListaDesejos}
           >
-            <Text style={estilos.textoWishlist}>Adicionar 💖</Text>
+            <Text style={estilos.textodesejos}>Adicionar 💖</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[estilos.botaoWishlist, { backgroundColor: "#9E9E9E" }]}
+            style={[estilos.botaodesejos, { backgroundColor: "#9E9E9E" }]}
             onPress={removerListaDesejos}
           >
-            <Text style={estilos.textoWishlist}>Remover 💔</Text>
+            <Text style={estilos.textodesejos}>Remover 💔</Text>
           </TouchableOpacity>
         </View>
 
@@ -315,14 +312,14 @@ const estilos = StyleSheet.create({
     marginBottom: 20,
     width: "100%",
   },
-  botaoWishlist: {
+  botaodesejos: {
     flex: 1,
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
     marginHorizontal: 5,
   },
-  textoWishlist: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+  textodesejos: { color: "#fff", fontSize: 16, fontWeight: "bold" },
   titulo: {
     fontSize: 20,
     fontWeight: "600",

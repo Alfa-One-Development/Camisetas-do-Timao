@@ -18,7 +18,7 @@ export default function TelaListaDesejos({ navigation }) {
 
   //----- CARREGAR LISTA DESEJOS -----
   const carregarListaDesejos = async () => {
-    const salvo = await AsyncStorage.getItem("wishlist"); // Busca dados salvos
+    const salvo = await AsyncStorage.getItem("desejos"); // Busca dados salvos
     if (salvo) setListaDesejos(JSON.parse(salvo)); // Converte JSON e atualiza estado
   };
 
@@ -33,7 +33,7 @@ export default function TelaListaDesejos({ navigation }) {
   const removerDaListaDesejos = async (id) => {
     const atualizado = listaDesejos.filter((item) => item.id !== id); // Remove item pelo ID
     setListaDesejos(atualizado); // Atualiza estado
-    await AsyncStorage.setItem("wishlist", JSON.stringify(atualizado)); // Salva atualização
+    await AsyncStorage.setItem("desejos", JSON.stringify(atualizado)); // Salva atualização
   };
 
   //----- CONFIRMAR REMOÇÃO -----

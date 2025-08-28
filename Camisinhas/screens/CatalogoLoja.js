@@ -13,7 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //----- FUNÇÃO PARA GERENCIAR LISTA DE DESEJOS -----
 const gerenciarListaDesejos = async (camisa) => {
-  const salvo = await AsyncStorage.getItem("wishlist");
+  const salvo = await AsyncStorage.getItem("desejos");
   let listaDesejos = salvo ? JSON.parse(salvo) : [];
 
   const existe = listaDesejos.find((c) => c.id === camisa.id);
@@ -22,7 +22,7 @@ const gerenciarListaDesejos = async (camisa) => {
     Alert.alert("Atenção!", "Essa Camisa já está na lista de desejos!");
   } else {
     listaDesejos.push(camisa);
-    await AsyncStorage.setItem("wishlist", JSON.stringify(listaDesejos));
+    await AsyncStorage.setItem("desejos", JSON.stringify(listaDesejos));
     Alert.alert("Parabéns!", "Essa Camisa foi adicionada à lista de desejos!");
   }
 };
