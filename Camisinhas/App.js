@@ -18,6 +18,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import CatalogScreen from "./screens/CatalogoLoja";
 import DetailsScreen from "./screens/DetalhesCamisa";
+import ListaDesejos from "./screens/ListaDesejos";
 // Mudei o nome da importação pra ficar padrão (com A maiúsculo)
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -120,6 +121,11 @@ export default function App() {
           name="Details"
           component={DetailsScreen}
           options={{ title: "Detalhes da Camisa" }}
+        />
+        <Stack.Screen
+          name="ListaDesejos"
+          component={ListaDesejos}
+          options={{ title: "Lista de Desejos" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

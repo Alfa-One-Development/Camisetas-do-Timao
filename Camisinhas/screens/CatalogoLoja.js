@@ -120,7 +120,6 @@ const camisas = [
     avaliacoes: 4.6,
   },
 ];
-
 const CamisaItem = ({ camisa, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress} style={itemStyles.card}>
@@ -132,33 +131,35 @@ const CamisaItem = ({ camisa, onPress }) => {
 };
 
 export default function CatalogScreen({ navigation }) {
-// Criei um estado pro nome aqui dentro do componente
   const [nome, setNome] = useState("");
 
-  // Usei o useEffect pra carregar o nome quando a tela abrir
   useEffect(() => {
-    // Fiz uma função async pra buscar o nome do AsyncStorage
     const carregarNome = async () => {
       try {
-        // Busquei o nome salvo
-        const nomeSalvo = AsyncStorage.getItem("nome");
+        const nomeSalvo = await AsyncStorage.getItem("nome");
         if (nomeSalvo) {
-          // Se tiver nome, atualizo o estado
           setNome(nomeSalvo);
         }
       } catch (error) {
-        // Se der erro, mostro no console
         console.error("Erro ao carregar nome:", error);
       }
     };
 
-    // Chamo a função pra carregar o nome
     carregarNome();
-  }, []); // O array vazio [] faz isso rodar só uma vez quando a tela abre
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Olá, {nome}!😎</Text>
+      {/* Cabeçalho com saudação e botão simples de lista de desejos */}
+      <View style={styles.header}>
+        <Text style={styles.titulo}>Olá, {nome}!😎</Text>
+        <TouchableOpacity 
+          onPress={() => navigation.navigate("ListaDesejos")}
+        >
+          <Text style={styles.wishlistButton}>❤️</Text>
+        </TouchableOpacity>
+      </View>
+      
       <FlatList
         data={camisas}
         keyExtractor={(item) => item.id.toString()}
@@ -181,12 +182,20 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#F0F4F8",
   },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
   titulo: {
     fontSize: 28,
     fontWeight: "800",
-    marginBottom: 20,
-    textAlign: "center",
     color: "#1E3A8A",
+  },
+  wishlistButton: {
+    fontSize: 24,
+    padding: 8,
   },
   columnWrapper: {
     justifyContent: "space-between",

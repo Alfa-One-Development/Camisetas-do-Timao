@@ -51,6 +51,25 @@ export default function DetalhesCamisa({ route, navigation }) {
     );
   }
 
+  // Função para adicionar à lista de desejos
+  const adicionarListaDesejos = async () => {
+    try {
+      const listaAtual = await AsyncStorage.getItem('listaDesejos');
+      let lista = listaAtual ? JSON.parse(listaAtual) : [];
+      // Some: erifica se existe pelo menos um elemento no array que satisfaça uma condição.
+      const existe = lista.some(item => item.id === camisa.id); //Verifica se já existe uma camisa com o mesmo id na lista de desejos; retorna true ao primeiro match (evita duplicados)
+      if (existe) {
+        Alert.alert('Já está na lista de desejos!');
+        return;
+      }
+      lista.push(camisa); //push adiciona um item ao fim do array
+      await AsyncStorage.setItem('listaDesejos', JSON.stringify(lista));
+      Alert.alert('Adicionado à lista de desejos!');
+    } catch (error) {
+      Alert.alert('Erro ao adicionar à lista de desejos.');
+    }
+  };
+
   return (
     <View style={estilos.container}>
       <Text>Olá, {nome}!</Text>
@@ -84,11 +103,16 @@ export default function DetalhesCamisa({ route, navigation }) {
             >
               <Text style={estilos.textoQuantidade}>+</Text>
             </TouchableOpacity>
+
+
           </View>
         </View>
 
         <TouchableOpacity style={estilos.botaoComprar} onPress={Alertar}>
           <Text style={estilos.textoBotaoComprar}>Comprar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[estilos.botaoComprar, {backgroundColor: '#FF4081', marginTop: 10}]} onPress={adicionarListaDesejos}>
+          <Text style={estilos.textoBotaoComprar}>Adicionar à Lista de Desejos</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
