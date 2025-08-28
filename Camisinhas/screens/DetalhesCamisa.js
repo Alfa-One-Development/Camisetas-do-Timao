@@ -53,7 +53,7 @@ export default function DetalhesCamisa({ route, navigation }) {
 
   return (
     <View style={estilos.container}>
-      <Text>Essa camisa do {camisas.name} ficaria muito bom em você, {nome}!😎</Text>
+      <Text style={estilos.titulo}>Essa camisa do {camisa.name} ficaria muito boa em você, {nome}!</Text>
       <Image source={{ uri: camisa.image }} style={estilos.imagemGrande} />
 
       <ScrollView style={estilos.detalhesContainer}>
@@ -192,5 +192,12 @@ const estilos = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  titulo: {
+    fontSize: 20,
+    fontWeight: "600",
+    textAlign: "center",
+    marginVertical: 10,
+    color: "#1E3A8A",
   },
 });
