@@ -1,51 +1,56 @@
+//----- IMPORTAÇÕES -----
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  FlatList,
-  StyleSheet,
-  Text,
-  Image,
-  TouchableOpacity,
-  Alert,
+  View, // Componente container
+  FlatList, // Lista rolável eficiente
+  StyleSheet, // Para criar estilos
+  Text, // Para exibir textos
+  Image, // Para exibir imagens
+  TouchableOpacity, // Área clicável
+  Alert, // Para alertas
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const toggleWishlist = async (camisa) => {
-  const saved = await AsyncStorage.getItem("wishlist");
-  let list = saved ? JSON.parse(saved) : [];
-  const exists = list.find((c) => c.id === camisa.id);
-  if (exists) {
-    Alert.alert("Atenção!", "Essa Camisa já está na lista!");
+//----- FUNÇÃO PARA GERENCIAR LISTA DE DESEJOS -----
+const gerenciarListaDesejos = async (camisa) => {
+  const salvo = await AsyncStorage.getItem("wishlist");
+  let listaDesejos = salvo ? JSON.parse(salvo) : [];
+
+  const existe = listaDesejos.find((c) => c.id === camisa.id);
+
+  if (existe) {
+    Alert.alert("Atenção!", "Essa Camisa já está na lista de desejos!");
   } else {
-    list.push(camisa);
-    await AsyncStorage.setItem("wishlist", JSON.stringify(list));
-    Alert.alert("Parabéns!", "Essa Camisa foi adicionada à lista com sucesso!");
+    listaDesejos.push(camisa);
+    await AsyncStorage.setItem("wishlist", JSON.stringify(listaDesejos));
+    Alert.alert("Parabéns!", "Essa Camisa foi adicionada à lista de desejos!");
   }
 };
 
+//----- COMPONENTE CamisaItem -----
 const CamisaItem = ({ camisa, onPress }) => {
   return (
     <View style={itemStyles.card}>
-      {/* área clicável que leva ao detalhe */}
       <TouchableOpacity style={itemStyles.touchArea} onPress={onPress}>
         <Image source={{ uri: camisa.image }} style={itemStyles.image} />
         <Text style={itemStyles.name}>{camisa.name}</Text>
         <Text style={itemStyles.preco}>{camisa.preco}</Text>
       </TouchableOpacity>
 
-      {/* botão de favoritar separado (fora da área de navegação) */}
-      <TouchableOpacity onPress={() => toggleWishlist(camisa)}>
-        <Text style={itemStyles.curtir}>💖</Text>
+      <TouchableOpacity onPress={() => gerenciarListaDesejos(camisa)}>
+        <Text style={itemStyles.curtir}>Favoritar</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default function CatalogScreen({ navigation }) {
+//----- COMPONENTE PRINCIPAL CatalogScreen -----
+export default function Catalogo({ navigation }) {
   const [nome, setNome] = useState("");
 
+  //----- CARREGAR NOME DO USUÁRIO -----
   useEffect(() => {
-    const carregarNome = async () => {
+    const carregarNomeUsuario = async () => {
       try {
         const nomeSalvo = await AsyncStorage.getItem("nome");
         if (nomeSalvo) setNome(nomeSalvo);
@@ -53,19 +58,20 @@ export default function CatalogScreen({ navigation }) {
         console.error("Erro ao carregar nome:", error);
       }
     };
-    carregarNome();
+    carregarNomeUsuario();
   }, []);
 
+  //----- RENDER -----
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Olá, {nome}!😎</Text>
+
       <FlatList
         data={camisas}
         keyExtractor={(item) => item.id.toString()}
         numColumns={2}
         columnWrapperStyle={styles.columnWrapper}
         renderItem={({ item }) => (
-          // IMPORTANTE: usamos exatamente "Details" (mesmo name do Stack.Screen)
           <CamisaItem
             camisa={item}
             onPress={() => navigation.navigate("Details", { camisa: item })}
@@ -213,7 +219,13 @@ const itemStyles = StyleSheet.create({
     paddingBottom: 8,
   },
   touchArea: { width: "100%", alignItems: "center" },
-  image: { width: "100%", height: 160, resizeMode: "contain", borderRadius: 8 },
+  image: {
+    width: "100%",
+    height: 160,
+    resizeMode: "contain",
+    marginTop: 0,
+    paddingBottom: 0,
+  },
   name: {
     fontSize: 16,
     fontWeight: "700",
@@ -223,5 +235,5 @@ const itemStyles = StyleSheet.create({
   },
   preco: { fontSize: 14, fontWeight: "bold", color: "#4CAF50" },
   heartBtn: { position: "absolute", right: 10, bottom: 8, padding: 6 },
-  curtir: { fontSize: 18 },
+  curtir: { fontSize: 14, fontWeight: "bold", color: "#ff7777ff", margin: 5 },
 });

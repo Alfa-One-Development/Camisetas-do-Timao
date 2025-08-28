@@ -1,3 +1,4 @@
+//----- IMPORTAÇÕES -----
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -10,51 +11,58 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function WishlistScreen({ navigation }) {
-  const [wishlist, setWishlist] = useState([]);
+//----- COMPONENTE PRINCIPAL -----
+export default function TelaListaDesejos({ navigation }) {
+  // Estado que armazena a lista de desejos
+  const [listaDesejos, setListaDesejos] = useState([]);
 
-  const loadWishlist = async () => {
-    const saved = await AsyncStorage.getItem("wishlist");
-    if (saved) setWishlist(JSON.parse(saved));
+  //----- CARREGAR LISTA DESEJOS -----
+  const carregarListaDesejos = async () => {
+    const salvo = await AsyncStorage.getItem("wishlist"); // Busca dados salvos
+    if (salvo) setListaDesejos(JSON.parse(salvo)); // Converte JSON e atualiza estado
   };
 
+  // useEffect para rodar quando o componente é montado e quando a tela ganha foco
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", loadWishlist);
-    loadWishlist(); // também carrega na primeira vez
-    return unsubscribe;
+    const unsubscribe = navigation.addListener("focus", carregarListaDesejos);
+    carregarListaDesejos(); // Carrega na primeira vez
+    return unsubscribe; // Remove listener ao desmontar
   }, [navigation]);
 
-  const removeFromWishlist = async (id) => {
-    const updated = wishlist.filter((item) => item.id !== id);
-    setWishlist(updated);
-    await AsyncStorage.setItem("wishlist", JSON.stringify(updated));
+  //----- REMOVER ITEM -----
+  const removerDaListaDesejos = async (id) => {
+    const atualizado = listaDesejos.filter((item) => item.id !== id); // Remove item pelo ID
+    setListaDesejos(atualizado); // Atualiza estado
+    await AsyncStorage.setItem("wishlist", JSON.stringify(atualizado)); // Salva atualização
   };
 
-  const confirmRemove = (id, name) => {
+  //----- CONFIRMAR REMOÇÃO -----
+  const confirmarRemocao = (id, nome) => {
     Alert.alert(
       "Remover",
-      `Remover "${name}" da sua lista de desejos?`,
+      `Remover "${nome}" da sua lista de desejos?`,
       [
         { text: "Cancelar", style: "cancel" },
         {
           text: "Remover",
           style: "destructive",
-          onPress: () => removeFromWishlist(id),
+          onPress: () => removerDaListaDesejos(id),
         },
       ],
       { cancelable: true }
     );
   };
 
+  //----- RENDER -----
   return (
     <View style={styles.container}>
-      {wishlist.length === 0 ? (
+      {listaDesejos.length === 0 ? (
         <View style={styles.center}>
           <Text style={styles.vazio}>Sua lista está vazia 😢</Text>
         </View>
       ) : (
         <FlatList
-          data={wishlist}
+          data={listaDesejos} // Usa a lista de desejos
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.list}
           renderItem={({ item }) => (
@@ -79,7 +87,7 @@ export default function WishlistScreen({ navigation }) {
               <View style={styles.actions}>
                 <TouchableOpacity
                   style={styles.botaoRemover}
-                  onPress={() => confirmRemove(item.id, item.name)}
+                  onPress={() => confirmarRemocao(item.id, item.name)}
                 >
                   <Text style={styles.textoRemover}>Remover</Text>
                 </TouchableOpacity>
@@ -92,6 +100,7 @@ export default function WishlistScreen({ navigation }) {
   );
 }
 
+//----- ESTILOS -----
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F8F9FA" },
   center: { flex: 1, justifyContent: "center", alignItems: "center" },
@@ -106,12 +115,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     elevation: 2,
   },
-  imagem: {
-    width: 70,
-    height: 70,
-    borderRadius: 8,
-    backgroundColor: "#eee",
-  },
+  imagem: { width: 70, height: 70, borderRadius: 8, backgroundColor: "#eee" },
   imagemPlaceholder: { justifyContent: "center", alignItems: "center" },
   info: { flex: 1, marginLeft: 12 },
   nome: { fontSize: 16, fontWeight: "600", marginBottom: 4 },

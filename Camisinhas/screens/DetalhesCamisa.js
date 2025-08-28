@@ -1,3 +1,4 @@
+//----- IMPORTAÇÕES -----
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -10,13 +11,18 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+//----- COMPONENTE PRINCIPAL -----
 export default function DetalhesCamisa({ route }) {
-  const { camisa } = route.params;
-  const [quantidade, setQuantidade] = useState(1);
-  const [nome, setNome] = useState("");
+  //----- PROPS -----
+  const { camisa } = route.params; // Camisa enviada do catálogo
 
+  //----- ESTADOS -----
+  const [quantidade, setQuantidade] = useState(1); // Quantidade selecionada
+  const [nome, setNome] = useState(""); // Nome do usuário
+
+  //----- CARREGAR NOME DO USUÁRIO -----
   useEffect(() => {
-    const carregarNome = async () => {
+    const carregarNomeUsuario = async () => {
       try {
         const nomeSalvo = await AsyncStorage.getItem("nome");
         if (nomeSalvo) setNome(nomeSalvo);
@@ -24,10 +30,11 @@ export default function DetalhesCamisa({ route }) {
         console.error("Erro ao carregar nome:", error);
       }
     };
-    carregarNome();
+    carregarNomeUsuario();
   }, []);
 
-  function Alertar() {
+  //----- FUNÇÃO DE COMPRA -----
+  const realizarCompra = () => {
     if (quantidade > camisa.estoque) {
       Alert.alert(
         "Estoque Insuficiente",
@@ -35,24 +42,28 @@ export default function DetalhesCamisa({ route }) {
       );
       return;
     }
+
+    const valorTotal =
+      parseFloat(camisa.preco.replace("R$", "").replace(",", ".")) * quantidade;
+
     Alert.alert(
       "Compra Realizada",
       `Parabéns ${nome}, você comprou ${quantidade} unidade(s) da camisa ${
         camisa.name
-      } \nValor total: R$${(
-        parseFloat(camisa.preco.replace("R$", "").replace(",", ".")) *
-        quantidade
-      ).toFixed(2)}`
+      } \nValor total: R$${valorTotal.toFixed(2)}`
     );
-  }
+  };
 
-  const addToWishlist = async () => {
-    const saved = await AsyncStorage.getItem("wishlist");
-    let list = saved ? JSON.parse(saved) : [];
-    const exists = list.find((c) => c.id === camisa.id);
-    if (!exists) {
-      list.push(camisa);
-      await AsyncStorage.setItem("wishlist", JSON.stringify(list));
+  //----- ADICIONAR À LISTA DE DESEJOS -----
+  const adicionarListaDesejos = async () => {
+    const salvo = await AsyncStorage.getItem("wishlist");
+    let listaDesejos = salvo ? JSON.parse(salvo) : [];
+
+    const existe = listaDesejos.find((c) => c.id === camisa.id);
+
+    if (!existe) {
+      listaDesejos.push(camisa);
+      await AsyncStorage.setItem("wishlist", JSON.stringify(listaDesejos));
       Alert.alert(
         "Adicionado 💖",
         `${camisa.name} foi adicionado à sua lista de desejos!`
@@ -62,30 +73,38 @@ export default function DetalhesCamisa({ route }) {
     }
   };
 
-  const removeFromWishlist = async () => {
-    const saved = await AsyncStorage.getItem("wishlist");
-    let list = saved ? JSON.parse(saved) : [];
-    const updated = list.filter((c) => c.id !== camisa.id);
-    await AsyncStorage.setItem("wishlist", JSON.stringify(updated));
+  //----- REMOVER DA LISTA DE DESEJOS -----
+  const removerListaDesejos = async () => {
+    const salvo = await AsyncStorage.getItem("wishlist");
+    let listaDesejos = salvo ? JSON.parse(salvo) : [];
+
+    const atualizado = listaDesejos.filter((c) => c.id !== camisa.id);
+    await AsyncStorage.setItem("wishlist", JSON.stringify(atualizado));
+
     Alert.alert(
       "Removido 💔",
       `${camisa.name} foi removido da sua lista de desejos.`
     );
   };
 
+  //----- RENDER -----
   return (
     <View style={estilos.container}>
+      {/* Imagem grande da camisa */}
       <Image source={{ uri: camisa.image }} style={estilos.imagemGrande} />
 
       <ScrollView style={estilos.detalhesContainer}>
+        {/* Informações do produto */}
         <Text style={estilos.nomeProdutoGrande}>{camisa.name}</Text>
         <Text style={estilos.precoProdutoGrande}>{camisa.preco}</Text>
         <Text style={estilos.descricaoProduto}>{camisa.description}</Text>
+
         <View style={estilos.infoExtras}>
           <Text style={estilos.estoque}>Estoque: {camisa.estoque}</Text>
           <Text style={estilos.avaliacao}>⭐ {camisa.avaliacoes} / 5</Text>
         </View>
 
+        {/* Seletor de quantidade */}
         <View style={estilos.seletorQuantidade}>
           <Text style={estilos.labelQuantidade}>Quantidade:</Text>
           <View style={estilos.controlesQuantidade}>
@@ -107,30 +126,33 @@ export default function DetalhesCamisa({ route }) {
           </View>
         </View>
 
-        {/* Botões de ação */}
-        <TouchableOpacity style={estilos.botaoComprar} onPress={Alertar}>
-          <Text style={estilos.textoBotaoComprar}>Comprar</Text>
-        </TouchableOpacity>
+        {/* Linha de botões de wishlist */}
         <View style={estilos.linhaBotoes}>
           <TouchableOpacity
             style={[estilos.botaoWishlist, { backgroundColor: "#E91E63" }]}
-            onPress={addToWishlist}
+            onPress={adicionarListaDesejos}
           >
             <Text style={estilos.textoWishlist}>Adicionar 💖</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[estilos.botaoWishlist, { backgroundColor: "#9E9E9E" }]}
-            onPress={removeFromWishlist}
+            onPress={removerListaDesejos}
           >
             <Text style={estilos.textoWishlist}>Remover 💔</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Botão de compra */}
+        <TouchableOpacity style={estilos.botaoComprar} onPress={realizarCompra}>
+          <Text style={estilos.textoBotaoComprar}>Comprar</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
 }
 
+//----- ESTILOS -----
 const estilos = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#F8F9FA" },
   imagemGrande: {
@@ -192,13 +214,14 @@ const estilos = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 12,
     alignItems: "center",
-    marginBottom: 15,
+    marginBottom: 60,
   },
   textoBotaoComprar: { color: "#fff", fontSize: 18, fontWeight: "bold" },
   linhaBotoes: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
+    width: "100%",
   },
   botaoWishlist: {
     flex: 1,
