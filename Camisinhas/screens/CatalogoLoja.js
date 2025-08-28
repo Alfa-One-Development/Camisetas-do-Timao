@@ -1,14 +1,88 @@
-import React, { useState, useEffect } from "react";
+//----- IMPORTAÇÕES -----
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  FlatList,
-  StyleSheet,
-  Text,
-  Image,
-  TouchableOpacity,
+  View, // Componente container
+  FlatList, // Lista rolável eficiente
+  StyleSheet, // Para criar estilos
+  Text, // Para exibir textos
+  Image, // Para exibir imagens
+  TouchableOpacity, // Área clicável
+  Alert, // Para alertas
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+//----- FUNÇÃO PARA GERENCIAR LISTA DE DESEJOS -----
+const gerenciarListaDesejos = async (camisa) => {
+  const salvo = await AsyncStorage.getItem("wishlist");
+  let listaDesejos = salvo ? JSON.parse(salvo) : [];
+
+  const existe = listaDesejos.find((c) => c.id === camisa.id);
+
+  if (existe) {
+    Alert.alert("Atenção!", "Essa Camisa já está na lista de desejos!");
+  } else {
+    listaDesejos.push(camisa);
+    await AsyncStorage.setItem("wishlist", JSON.stringify(listaDesejos));
+    Alert.alert("Parabéns!", "Essa Camisa foi adicionada à lista de desejos!");
+  }
+};
+
+//----- COMPONENTE CamisaItem -----
+const CamisaItem = ({ camisa, onPress }) => {
+  return (
+    <View style={itemStyles.card}>
+      <TouchableOpacity style={itemStyles.touchArea} onPress={onPress}>
+        <Image source={{ uri: camisa.image }} style={itemStyles.image} />
+        <Text style={itemStyles.name}>{camisa.name}</Text>
+        <Text style={itemStyles.preco}>{camisa.preco}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => gerenciarListaDesejos(camisa)}>
+        <Text style={itemStyles.curtir}>Favoritar</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+//----- COMPONENTE PRINCIPAL CatalogScreen -----
+export default function Catalogo({ navigation }) {
+  const [nome, setNome] = useState("");
+
+  //----- CARREGAR NOME DO USUÁRIO -----
+  useEffect(() => {
+    const carregarNomeUsuario = async () => {
+      try {
+        const nomeSalvo = await AsyncStorage.getItem("nome");
+        if (nomeSalvo) setNome(nomeSalvo);
+      } catch (error) {
+        console.error("Erro ao carregar nome:", error);
+      }
+    };
+    carregarNomeUsuario();
+  }, []);
+
+  //----- RENDER -----
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Olá, {nome}!😎</Text>
+
+      <FlatList
+        data={camisas}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={2}
+        columnWrapperStyle={styles.columnWrapper}
+        renderItem={({ item }) => (
+          <CamisaItem
+            camisa={item}
+            onPress={() => navigation.navigate("Details", { camisa: item })}
+          />
+        )}
+      />
+    </View>
+  );
+}
+
+/* --- camisas e estilos (mesmos que você já tinha) --- */
 const camisas = [
   {
     id: 1,
@@ -121,66 +195,8 @@ const camisas = [
   },
 ];
 
-const CamisaItem = ({ camisa, onPress }) => {
-  return (
-    <TouchableOpacity onPress={onPress} style={itemStyles.card}>
-      <Image source={{ uri: camisa.image }} style={itemStyles.image} />
-      <Text style={itemStyles.name}>{camisa.name}</Text>
-      <Text style={itemStyles.preco}>{camisa.preco}</Text>
-    </TouchableOpacity>
-  );
-};
-
-export default function CatalogScreen({ navigation }) {
-// Criei um estado pro nome aqui dentro do componente
-  const [nome, setNome] = useState("");
-
-  // Usei o useEffect pra carregar o nome quando a tela abrir
-  useEffect(() => {
-    // Fiz uma função async pra buscar o nome do AsyncStorage
-    const carregarNome = async () => {
-      try {
-        // Busquei o nome salvo
-        const nomeSalvo = AsyncStorage.getItem("nome");
-        if (nomeSalvo) {
-          // Se tiver nome, atualizo o estado
-          setNome(nomeSalvo);
-        }
-      } catch (error) {
-        // Se der erro, mostro no console
-        console.error("Erro ao carregar nome:", error);
-      }
-    };
-
-    // Chamo a função pra carregar o nome
-    carregarNome();
-  }, []); // O array vazio [] faz isso rodar só uma vez quando a tela abre
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Bem-vindo, {nome}! Boas Compras!</Text>
-      <FlatList
-        data={camisas}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={2}
-        columnWrapperStyle={styles.columnWrapper}
-        renderItem={({ item }) => (
-          <CamisaItem
-            camisa={item}
-            onPress={() => navigation.navigate("Details", { camisa: item })}
-          />
-        )}
-      />
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: "#F0F4F8",
-  },
+  container: { flex: 1, padding: 16, backgroundColor: "#F0F4F8" },
   titulo: {
     fontSize: 28,
     fontWeight: "800",
@@ -188,10 +204,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#1E3A8A",
   },
-  columnWrapper: {
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
+  columnWrapper: { justifyContent: "space-between", marginBottom: 10 },
 });
 
 const itemStyles = StyleSheet.create({
@@ -202,28 +215,25 @@ const itemStyles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 12,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
     elevation: 4,
+    paddingBottom: 8,
   },
+  touchArea: { width: "100%", alignItems: "center" },
   image: {
     width: "100%",
-    height: 200,
+    height: 160,
     resizeMode: "contain",
-    borderRadius: 20,
+    marginTop: 0,
+    paddingBottom: 0,
   },
   name: {
     fontSize: 16,
     fontWeight: "700",
     color: "#333333",
     textAlign: "center",
-    marginBottom: 4,
+    marginVertical: 6,
   },
-  preco: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#4CAF50",
-  },
+  preco: { fontSize: 14, fontWeight: "bold", color: "#4CAF50" },
+  heartBtn: { position: "absolute", right: 10, bottom: 8, padding: 6 },
+  curtir: { fontSize: 14, fontWeight: "bold", color: "#ff7777ff", margin: 5 },
 });
