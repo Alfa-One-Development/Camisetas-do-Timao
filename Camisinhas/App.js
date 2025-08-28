@@ -42,7 +42,7 @@ export default function App() {
     setTimeout(() => {
       setLoading(false);
 
-      if (senha === "123") {
+      if (senha === "123" && usuario === "aluno" && nome.trim(3)) {
         Alert.alert("Sucesso 🎉", "Login realizado com sucesso!");
       
         AsyncStorage.setItem("nome", nome);
