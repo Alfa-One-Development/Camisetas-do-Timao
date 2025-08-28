@@ -158,7 +158,7 @@ export default function CatalogScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Olá, {nome}!😎</Text>
+      <Text style={styles.titulo}>Bem-vindo, {nome}! Boas Compras</Text>
       <FlatList
         data={camisas}
         keyExtractor={(item) => item.id.toString()}

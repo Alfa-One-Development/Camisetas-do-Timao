@@ -53,7 +53,7 @@ export default function DetalhesCamisa({ route, navigation }) {
 
   return (
     <View style={estilos.container}>
-      <Text>Olá, {nome}!</Text>
+      <Text>Essa camisa do {camisas.name} ficaria muito bom em você, {nome}!😎</Text>
       <Image source={{ uri: camisa.image }} style={estilos.imagemGrande} />
 
       <ScrollView style={estilos.detalhesContainer}>
