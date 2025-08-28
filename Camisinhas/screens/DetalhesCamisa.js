@@ -42,7 +42,10 @@ export default function DetalhesCamisa({ route }) {
   //----- FUNÇÃO DE COMPRA -----
   const realizarCompra = () => {
     if (!tamanhoSelecionado) {
-      Alert.alert("Selecione um tamanho", "Você precisa escolher um tamanho antes de comprar.");
+      Alert.alert(
+        "Selecione um tamanho",
+        "Você precisa escolher um tamanho antes de comprar."
+      );
       return;
     }
 
@@ -62,7 +65,8 @@ export default function DetalhesCamisa({ route }) {
       `Parabéns ${nome}, você comprou ${quantidade} unidade(s) da camisa ${
         camisa.name
       } - Tamanho ${tamanhoSelecionado}\nValor total: R$${(
-        parseFloat(camisa.preco.replace("R$", "").replace(",", ".")) * quantidade
+        parseFloat(camisa.preco.replace("R$", "").replace(",", ".")) *
+        quantidade
       ).toFixed(2)}`
     );
   };
@@ -231,7 +235,7 @@ const estilos = StyleSheet.create({
     marginBottom: 14,
     lineHeight: 22,
   },
-  
+
   infoExtras: {
     marginBottom: 18,
   },
@@ -319,7 +323,6 @@ const estilos = StyleSheet.create({
     marginHorizontal: 5,
   },
   textoWishlist: { color: "#fff", fontSize: 16, fontWeight: "bold" },
-}),
   titulo: {
     fontSize: 20,
     fontWeight: "600",
