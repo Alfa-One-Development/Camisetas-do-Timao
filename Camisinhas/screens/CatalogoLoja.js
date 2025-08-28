@@ -141,7 +141,7 @@ export default function CatalogScreen({ navigation }) {
     const carregarNome = async () => {
       try {
         // Busquei o nome salvo
-        const nomeSalvo = await AsyncStorage.getItem("nome");
+        const nomeSalvo = AsyncStorage.getItem("nome");
         if (nomeSalvo) {
           // Se tiver nome, atualizo o estado
           setNome(nomeSalvo);

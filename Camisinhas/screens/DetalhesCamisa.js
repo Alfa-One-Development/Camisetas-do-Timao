@@ -19,13 +19,13 @@ export default function DetalhesCamisa({ route, navigation }) {
     const carregarNome = async () => {
       try {
         // Busquei o nome do AsyncStorage
-        const nomeSalvo = await AsyncStorage.getItem("nome");
+        const nomeSalvo = AsyncStorage.getItem("nome");
         if (nomeSalvo) {
           // Se tiver, atualizei o estado
           setNome(nomeSalvo);
         }
       } catch (error) {
-        // Tratei possíveis erros
+        // possíveis erros
         console.error("Erro ao carregar nome:", error);
       }
     };
