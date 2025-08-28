@@ -24,10 +24,8 @@ export default function TelaListaDesejos({ navigation }) {
 
   // useEffect para rodar quando o componente é montado e quando a tela ganha foco
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", carregarListaDesejos);
     carregarListaDesejos(); // Carrega na primeira vez
-    return unsubscribe; // Remove listener ao desmontar
-  }, [navigation]);
+  }, []);
 
   //----- REMOVER ITEM -----
   const removerDaListaDesejos = async (id) => {
@@ -68,7 +66,6 @@ export default function TelaListaDesejos({ navigation }) {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.item}
-              activeOpacity={0.8}
               onPress={() => navigation.navigate("Details", { camisa: item })}
             >
               {item.image ? (

@@ -64,10 +64,9 @@ export default function DetalhesCamisa({ route }) {
       "Compra Realizada",
       `Parabéns ${nome}, você comprou ${quantidade} unidade(s) da camisa ${
         camisa.name
-      } - Tamanho ${tamanhoSelecionado}\nValor total: R$${(
-        parseFloat(camisa.preco.replace("R$", "").replace(",", ".")) *
-        quantidade
-      ).toFixed(2)}`
+      } - Tamanho ${tamanhoSelecionado}\nValor total: R$${valorTotal.toFixed(
+        2
+      )}`
     );
   };
 
@@ -76,7 +75,9 @@ export default function DetalhesCamisa({ route }) {
     const salvo = await AsyncStorage.getItem("desejos");
     let listaDesejos = salvo ? JSON.parse(salvo) : [];
 
-    const existe = listaDesejos.find((c) => c.id === camisa.id);
+    const existe = listaDesejos.find(
+      (camisaParametro) => camisaParametro.id === camisa.id
+    );
 
     if (!existe) {
       listaDesejos.push(camisa);
@@ -95,7 +96,9 @@ export default function DetalhesCamisa({ route }) {
     const salvo = await AsyncStorage.getItem("desejos");
     let listaDesejos = salvo ? JSON.parse(salvo) : [];
 
-    const atualizado = listaDesejos.filter((c) => c.id !== camisa.id);
+    const atualizado = listaDesejos.filter(
+      (camisaParametro) => camisaParametro.id !== camisa.id
+    );
     await AsyncStorage.setItem("desejos", JSON.stringify(atualizado));
 
     Alert.alert(
